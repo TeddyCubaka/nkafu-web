@@ -2666,6 +2666,16 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
+survey-core@^1.12.17:
+  version "1.12.17"
+  resolved "https://registry.yarnpkg.com/survey-core/-/survey-core-1.12.17.tgz#6a07f1bd0e207b02e6f5c280e341d097432486fa"
+  integrity sha512-gjJx+tnMtsPEW3+wLBFQvIrl9K88HMNLEJ9H6rgCtCafZy8V6xcQQHLMLv5XgYVy2Hs/crqoSs7Dg08kMUxubA==
+
+survey-react-ui@^1.12.17:
+  version "1.12.17"
+  resolved "https://registry.yarnpkg.com/survey-react-ui/-/survey-react-ui-1.12.17.tgz#77ed18faf0cf628868632e304e6dc26926cfa573"
+  integrity sha512-qmDjO3B9aklcOanGxRlZ+9+/GLve3m5dE76GNwx8CnwMcsVEDtM2YpnkfEZqjIYBOYQEUEQTx3NMmtzfTIfQIA==
+
 tailwindcss@^3.4.1:
   version "3.4.17"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.4.17.tgz#ae8406c0f96696a631c790768ff319d46d5e5a63"
