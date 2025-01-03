@@ -3,7 +3,11 @@ type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 class HttpClient {
   private baseUrl: string;
   private defaultHeaders: HeadersInit;
-  error: Record<string, any> | null = null;
+  error: {
+    code: number;
+    message: string;
+    [key: string]: any;
+  } | null = null;
 
   constructor(defaultHeaders: HeadersInit = {}) {
     this.baseUrl =

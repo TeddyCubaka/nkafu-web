@@ -6,8 +6,11 @@ import Image from "next/image";
 import { FormEvent, useState } from "react";
 import image from "@/../public/logo/icon.png";
 import HttpClient from "@/utils/http-client";
+import { ConnectUser } from "@/types/connected-user";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const [connecting, setConnecting] = useState<boolean>(false);
   const [loginData, setLoginData] = useState<{
     identifier: InputValueType;
     password: InputValueType;
@@ -21,7 +24,14 @@ const LoginPage = () => {
       value: "",
     },
   });
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<{
+    code: number;
+    message: string;
+    [key: string]: any;
+  } | null>(null);
+
+  const router = useRouter();
+
   const loginForm: InputType[] = [
     {
       proprety: "identifier",
@@ -45,39 +55,56 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
+    setError(null);
+    setConnecting(true);
     const formData = new FormData(e.currentTarget);
     const formValues: Record<string, any> = {};
     formData.forEach((value, key) => {
       formValues[key] = value;
     });
     const apiClient = new HttpClient();
-    const data = await apiClient.post("/auth/login", formValues);
+    const data: Record<string, any> = await apiClient.post(
+      "/auth/login",
+      formValues
+    );
     if (!data && apiClient.error !== null) {
-      setError(apiClient.error.message);
+      setError(apiClient.error);
+      setConnecting(false);
       return;
     }
+    const user: ConnectUser = data.data;
 
-    console.log(data);
+    localStorage.setItem("dp-sk-moto-user", JSON.stringify(user));
+    setConnecting(false);
+    router.push("/");
   };
   return (
-    <main className="w-full grid grid-cols-2 gap-5 h-screen">
+    <main className="w-full flex gap-5 h-screen">
       <form
-        className="mx-auto w-3/4 h-full flex flex-col justify-center gap-5 items-center "
+        className="p-16 lg:w-3/5 md:w-4/5 max-md:w-full h-full flex flex-col justify-center gap-5 items-center "
         onSubmit={handleSubmit}
       >
-        <div>
-          <Image src={image} alt="helo" width={200} height={200} />
+        <div className="w-full flex flex-col gap-5">
+          <Image src={image} alt="helo" width={100} height={100} />
+          <h1 className="text-4xl">Connection</h1>
         </div>
-        {error.length > 0 ? (
-          <span className="text-red-500 w-full">{error}</span>
+        {error !== null ? (
+          <span
+            className={`w-full ${
+              error.code > 399 ? "text-red-500" : "text-green-500"
+            }`}
+          >
+            {error.message}
+          </span>
         ) : (
           false
         )}
         {loginForm.map((field) => {
           return <Input {...field} key={field.proprety} />;
         })}
-        <Button className="w-full">button</Button>
+        <Button isLoading={connecting} className="w-full">
+          button
+        </Button>
       </form>
       <div className="block max-md:hidden w-full h-full bg-primary"></div>
     </main>
