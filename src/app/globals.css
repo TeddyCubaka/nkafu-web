@@ -6,16 +6,23 @@
   --background: #ffffff;
   --foreground: #000000;
   --primary-color: #048996;
+  --primary: #048996;
 }
 
 .dark {
   --background: #010418;
   --foreground: #ffffff;
-  --primary-color: #00d1b2;
+  /* --primary-color: #00d1b2; */
+  --primary: #048996;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Ajout d'une classe pour s'assurer que le texte prend la couleur du foreground */
+.text-foreground {
+  color: var(--foreground);
 }

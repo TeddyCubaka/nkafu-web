@@ -14,6 +14,7 @@ export type ApiInputType = {
     | "file"
     | "float"
     | "boolean"
+    | "password"
     | "childrens";
   placeholder?: string;
   options?: Array<InputOption>;
