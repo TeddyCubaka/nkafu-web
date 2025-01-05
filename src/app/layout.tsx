@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { AuthGuard } from "@/components/auth-guard";
+import Sidebar from "@/components/commons/sidebar";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -26,7 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${inter_Tight.variable} antialiased`}>
-        <AuthGuard>{children}</AuthGuard>
+        <AuthGuard>
+          <main className="w-screen h-screen flex">
+            <Sidebar />
+            <div className=" w-full">{children}</div>
+          </main>
+        </AuthGuard>
       </body>
     </html>
   );
