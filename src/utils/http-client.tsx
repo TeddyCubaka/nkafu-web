@@ -1,3 +1,5 @@
+import { useRouter } from "next/navigation";
+
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 class HttpClient {
@@ -25,7 +27,12 @@ class HttpClient {
     customHeaders?: HeadersInit
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-    const headers = { ...this.defaultHeaders, ...customHeaders };
+    const brutToken = localStorage.getItem("dp-sk-moto-token");
+    const headers = {
+      ...this.defaultHeaders,
+      ...customHeaders,
+      Authorization: brutToken == null ? "" : `Bearer ${JSON.parse(brutToken)}`,
+    };
 
     const options: RequestInit = {
       method,
@@ -44,13 +51,12 @@ class HttpClient {
       const response = await fetch(url, options);
 
       if (!response.ok) {
-        this.error = await response.json();
+        const error = await response.json();
+        if (error.statusCode)
+          this.error = { code: error.statusCode, message: error.message };
+        else this.error = error;
+
         return false as T;
-        // throw new Error(
-        //   `HTTP Error: ${response.status} - ${
-        //     response.statusText
-        //   }\nDetails: ${JSON.stringify(errorData)}`
-        // );
       }
 
       if (response.status === 204) return null as T;
@@ -58,8 +64,16 @@ class HttpClient {
       const data = await response.json();
       return data as T;
     } catch (error: any) {
-      console.error("HTTP Request Error:", error.message);
-      throw error;
+      this.error = {
+        code: 500,
+        message: "une erreur s'est produite",
+        error: {
+          errorCode: error.code,
+          errorMessage: error.message,
+          details: error.toString(),
+        },
+      };
+      return false as T;
     }
   }
 

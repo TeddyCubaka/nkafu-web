@@ -113,6 +113,7 @@ const NavSection = ({
 
 const Sidebar: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const path = usePathname();
 
   const toggleTheme = () => {
     const html = document.documentElement;
@@ -140,6 +141,8 @@ const Sidebar: React.FC = () => {
       setIsDarkMode(false);
     }
   }, []);
+
+  if (["auth/login"].includes(path)) return false;
 
   return (
     <div className="bg-background text-foreground shadow-md w-1/6 p-5">
