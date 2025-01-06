@@ -31,6 +31,12 @@ const menus: SideBarContent[] = [
         path: "/list/core/menu",
         actions: [],
       },
+      {
+        Icon: null,
+        name: "actions dans le système",
+        path: "/list/core/action",
+        actions: [],
+      },
     ],
   },
   {
@@ -142,7 +148,7 @@ const Sidebar: React.FC = () => {
     }
   }, []);
 
-  if (["auth/login"].includes(path)) return false;
+  if (["/auth/login"].includes(path)) return false;
 
   return (
     <div className="bg-background text-foreground shadow-md w-1/6 p-5">
