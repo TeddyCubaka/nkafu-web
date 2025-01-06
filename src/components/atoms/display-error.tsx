@@ -3,7 +3,7 @@ import { useState } from "react";
 import { CiCircleAlert, CiCircleCheck, CiCircleRemove } from "react-icons/ci";
 import { FiChevronDown, FiChevronRight, FiClock } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
-import { IoReload } from "react-icons/io5";
+import { IoChevronBack, IoReload } from "react-icons/io5";
 import Button from "../commons/button";
 export type AlertStatus = "success" | "error" | "warning" | "info";
 
@@ -68,15 +68,30 @@ export const JsonErrorCard = ({
   };
 
   return (
-    <div className="border bg-white p-10 rounded-md">
-      <div className="p-5 flex flex-col justify-center items-center gap-5 text-2xl">
-        {status == "error" ? (
-          <Button variant="outline" onClick={() => window.location.reload()}>
-            <IoReload size={30} />
+    <div className="border bg-white p-10 rounded-md flex flex-col gap-5">
+      <div className="flex flex-col justify-center items-center gap-5 text-2xl">
+        <div className="w-full flex gap-5">
+          <Button
+            className="w-full p-2"
+            variant="outline"
+            onClick={() => router.back()}
+          >
+            <IoChevronBack size={20} />
+            <span className="w-full">retour</span>
           </Button>
-        ) : (
-          ""
-        )}
+          {status == "error" ? (
+            <Button
+              className="w-full p-2"
+              variant="secondary"
+              onClick={() => window.location.reload()}
+            >
+              <IoReload size={20} />
+              <span className="w-full">rafraichir</span>
+            </Button>
+          ) : (
+            ""
+          )}
+        </div>
         <h1
           className={`text-4xl flex gap-2.5 items-center ${colorStyle[status]}`}
         >

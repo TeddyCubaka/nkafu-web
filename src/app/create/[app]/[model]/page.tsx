@@ -6,11 +6,12 @@ import Button from "@/components/commons/button";
 import Form from "@/components/commons/form";
 import { InputType } from "@/types/types";
 import HttpClient from "@/utils/http-client";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const CreateModelPage = () => {
   const path = usePathname();
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<
     | {
@@ -52,7 +53,7 @@ const CreateModelPage = () => {
   if (loading) return <Loader />;
   if (error)
     return (
-      <div className="flex justify-center h-full items-center">
+      <div className="flex justify-center h-full items-center flex-col">
         <JsonErrorCard
           {...{
             message: error.message,
@@ -61,12 +62,12 @@ const CreateModelPage = () => {
             errorDetails: error,
           }}
         />
-        <Button onClick={() => setError(undefined)}>reprendre</Button>
       </div>
     );
   return (
     <div className="p-10">
       <Form
+        title={`Enrigistrement dans : ${params.model}`}
         inputs={inputs}
         onSubmit={async (data) => {
           const httpClient = new HttpClient();
@@ -80,6 +81,24 @@ const CreateModelPage = () => {
             error: response || httpClient.error,
           });
         }}
+        actions={
+          <div>
+            <Button
+              className="shadow-none rounded-none text-sm !bg-gray-200 text-gray-600"
+              variant="primary"
+              onClick={() => router.push(`/list/${params.app}/${params.model}`)}
+            >
+              Annuler
+            </Button>
+            <Button
+              className="shadow-none rounded-none text-sm bg-green-200 text-green-600"
+              variant="primary"
+              type="submit"
+            >
+              Sauvegarder
+            </Button>
+          </div>
+        }
       />
     </div>
   );

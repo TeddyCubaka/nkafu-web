@@ -50,12 +50,11 @@ class HttpClient {
     }
 
     try {
-      console.log("fetching>.....", url);
       const response = await fetch(url, options);
 
       if (!response.ok) {
         const error = await response.json();
-        if (error.statusCode)
+        if ("statusCode" in error)
           this.error = { code: error.statusCode, message: error.message };
         else this.error = error;
 

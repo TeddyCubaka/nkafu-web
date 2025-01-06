@@ -79,15 +79,16 @@ const ListModelPage = () => {
   const handleConfirm = async () => {
     const httpClient = new HttpClient();
     const response: any | false = await httpClient.delete(
-      `/delete/${params.app}/${params.model}`
+      `/delete/${params.app}/${params.model}/${params.id}`
     );
+    console.log(httpClient.error);
     setError({
-      code: response?.code || httpClient.error?.code || 500,
+      code: httpClient.error?.code || response?.code || 500,
       message:
-        response.message ||
         httpClient.error?.message ||
+        response.message ||
         "une erreur s'est produite. Veuillez reessayer plus tard",
-      error: response || httpClient.error,
+      error: httpClient.error || response,
     });
     setDialogOpen(false);
   };
@@ -126,22 +127,23 @@ const ListModelPage = () => {
         actions={
           <div>
             <Button
-              className="shadow-none rounded-none text-sm !bg-gray-200 text-gray-600"
+              className="shadow-none rounded-none text-sm !bg-gray-200 text-gray-600 hover:bg-gray-300"
               variant="primary"
               onClick={() => router.push(`/list/${params.app}/${params.model}`)}
             >
               Annuler
             </Button>
             <Button
-              className="shadow-none rounded-none text-sm bg-green-200 text-green-600"
+              className="shadow-none rounded-none text-sm bg-green-200 text-green-600 hover:bg-green-300"
               variant="primary"
               type="submit"
             >
               Sauvegarder
             </Button>
             <Button
-              variant="primary"
-              className="shadow-none rounded-none text-sm bg-red-200 text-red-600"
+              variant="secondary"
+              type="button"
+              className="shadow-none rounded-none text-sm bg-red-200 text-red-600 hover:bg-red-300"
               onClick={async () => {
                 setDialogOpen(true);
               }}
