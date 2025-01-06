@@ -101,7 +101,7 @@ const Input = (props: InputType) => {
             {dynamicOptions &&
               dynamicOptions.map((option) => (
                 <option key={String(option.value)} value={option.value}>
-                  {String(option.verbose)}
+                  {String(option.label)}
                 </option>
               ))}
           </select>

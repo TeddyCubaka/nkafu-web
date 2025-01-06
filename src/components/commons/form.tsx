@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { ApiInputType, InputValueType } from "@/types/types";
+import { InputType, InputValueType } from "@/types/types";
 import Input from "./dynamicInput";
 
 interface FormProps {
-  inputs: ApiInputType[]; // Tableau des champs de formulaire
+  inputs: InputType[]; // Tableau des champs de formulaire
   onSubmit: (data: Record<string, any>) => void; // Fonction à appeler lors de la soumission
 }
 
@@ -13,7 +13,9 @@ const Form: React.FC<FormProps> = ({ inputs, onSubmit }) => {
     () =>
       inputs.reduce((acc, input) => {
         let defaultValue: any;
-        if (input.type === "boolean") defaultValue = false;
+        if (input.value.value && input.value.value !== null) {
+          defaultValue = input.value.value;
+        } else if (input.type === "boolean") defaultValue = false;
         else if (input.type === "number" || input.type === "float")
           defaultValue = 0;
         else defaultValue = ""; // Par défaut, une chaîne vide pour tous les autres types

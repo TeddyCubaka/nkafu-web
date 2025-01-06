@@ -26,3 +26,32 @@ body {
 .text-foreground {
   color: var(--foreground);
 }
+
+.pulse {
+  border-radius: 50%;
+  background: #048996;
+  box-shadow: 0 0 0 0 #04899680;
+  animation: pulse-kefe91md 1.5s infinite linear;
+  position: relative;
+}
+
+.pulse:before,
+.pulse:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 #04899680;
+  animation: inherit;
+  animation-delay: -0.5s;
+}
+
+.pulse:after {
+  animation-delay: -1s;
+}
+
+@keyframes pulse-kefe91md {
+  100% {
+    box-shadow: 0 0 0 44.8px #0000;
+  }
+}

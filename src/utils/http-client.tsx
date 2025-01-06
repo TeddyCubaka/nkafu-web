@@ -26,7 +26,9 @@ class HttpClient {
     body?: Record<string, any> | FormData,
     customHeaders?: HeadersInit
   ): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`;
+    const url = `${this.baseUrl}${
+      endpoint[0] == "/" ? endpoint : `/${endpoint}`
+    }`;
     const brutToken = localStorage.getItem("dp-sk-moto-token");
     const headers = {
       ...this.defaultHeaders,
@@ -48,6 +50,7 @@ class HttpClient {
     }
 
     try {
+      console.log("fetching>.....", url);
       const response = await fetch(url, options);
 
       if (!response.ok) {

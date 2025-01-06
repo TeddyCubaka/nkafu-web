@@ -1,6 +1,6 @@
 export type InputOption = {
   value: string | number | readonly string[] | undefined;
-  verbose: string | number | boolean;
+  label: string | number | boolean;
 };
 export type ApiInputType = {
   verbose: string;
