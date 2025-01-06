@@ -2,13 +2,18 @@
 import React, { useState } from "react";
 import { InputType, InputValueType } from "@/types/types";
 import Input from "./dynamicInput";
+import { useParams, useRouter } from "next/navigation";
+import Button from "./button";
+import HttpClient from "@/utils/http-client";
 
 interface FormProps {
+  title: string;
   inputs: InputType[]; // Tableau des champs de formulaire
   onSubmit: (data: Record<string, any>) => void; // Fonction à appeler lors de la soumission
+  actions: React.ReactNode;
 }
 
-const Form: React.FC<FormProps> = ({ inputs, onSubmit }) => {
+const Form: React.FC<FormProps> = ({ title, inputs, onSubmit, actions }) => {
   const [formValues, setFormValues] = useState<Record<string, InputValueType>>(
     () =>
       inputs.reduce((acc, input) => {
@@ -61,28 +66,28 @@ const Form: React.FC<FormProps> = ({ inputs, onSubmit }) => {
   if (inputs.length < 1) return <div>Ce formulaire est introuvable</div>;
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-      {inputs.map((input) => (
-        <div key={input.proprety} className="flex flex-col">
-          <Input
-            {...input}
-            value={formValues[input.proprety]}
-            setValue={(value) => handleInputChange(input.proprety, value)}
-            key={input.proprety}
-          />
-          {formValues[input.proprety]?.errorMessage && (
-            <span className="text-red-500 text-sm">
-              {formValues[input.proprety].errorMessage}
-            </span>
-          )}
-        </div>
-      ))}
-      <button
-        type="submit"
-        className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark"
-      >
-        Soumettre
-      </button>
+    <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+      <div className="p-8 rounded-md bg-white flex items-center justify-between">
+        <h1 className="text-xl">{title}</h1>
+        {actions}
+      </div>
+      <div className="p-8 bg-white rounded-md flex flex-col gap-5">
+        {inputs.map((input) => (
+          <div key={input.proprety} className="flex flex-col">
+            <Input
+              {...input}
+              value={formValues[input.proprety]}
+              setValue={(value) => handleInputChange(input.proprety, value)}
+              key={input.proprety}
+            />
+            {formValues[input.proprety]?.errorMessage && (
+              <span className="text-red-500 text-sm">
+                {formValues[input.proprety].errorMessage}
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
     </form>
   );
 };

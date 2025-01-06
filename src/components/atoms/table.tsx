@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FiSearch, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import notElement from "@/../public/window.svg";
 import Button from "../commons/button";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
+import Link from "next/link";
 
 export interface DataTableColumnType<T> {
   proprety: string;
@@ -61,6 +62,7 @@ export function DataTable<T extends { id?: string | number }>({
   const itemsPerPage = 10;
   const router = useRouter();
   const path = usePathname();
+  const params: { app: string; model: string } = useParams();
 
   useEffect(() => {
     if (searchable && searchTerm) {
@@ -198,14 +200,12 @@ export function DataTable<T extends { id?: string | number }>({
                     </td>
                   ))}
                   <td className="px-4 py-3 whitespace-nowrap w-fit">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        router.push(`${path}/${item.id}`);
-                      }}
+                    <Link
+                      href={`/change/${params.app}/${params.model}/${item.id}`}
+                      className="text-sm font-semibold text-primary"
                     >
-                      <MdOutlineRemoveRedEye size={20} />
-                    </Button>
+                      Afficher
+                    </Link>
                   </td>
                 </tr>
               );

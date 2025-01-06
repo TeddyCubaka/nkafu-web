@@ -1,14 +1,19 @@
 "use client";
+import ConfirmDialog from "@/components/atoms/dialog";
 import { JsonErrorCard } from "@/components/atoms/display-error";
 import Loader from "@/components/atoms/loader";
+import Button from "@/components/commons/button";
 import Form from "@/components/commons/form";
 import { InputType } from "@/types/types";
 import HttpClient from "@/utils/http-client";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ListModelPage = () => {
   const path = usePathname();
+  const params: { app: string; model: string; id: string } = useParams();
+  const router = useRouter();
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<{
     code: number;
@@ -17,7 +22,6 @@ const ListModelPage = () => {
   }>();
   const [data, setData] = useState<any>([]);
   const [inputs, setInputs] = useState<InputType[]>([]);
-  const params: { app: string; model: string; id: string } = useParams();
 
   useEffect(() => {
     // fetch heads
@@ -63,8 +67,6 @@ const ListModelPage = () => {
         return;
       }
 
-      console.log(data);
-
       setData(data.data);
       setLoading(false);
     };
@@ -72,10 +74,28 @@ const ListModelPage = () => {
     requester();
   }, []);
 
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
+  const handleConfirm = async () => {
+    const httpClient = new HttpClient();
+    const response: any | false = await httpClient.delete(
+      `/delete/${params.app}/${params.model}`
+    );
+    setError({
+      code: response?.code || httpClient.error?.code || 500,
+      message:
+        response.message ||
+        httpClient.error?.message ||
+        "une erreur s'est produite. Veuillez reessayer plus tard",
+      error: response || httpClient.error,
+    });
+    setDialogOpen(false);
+  };
+
   if (loading) return <Loader />;
   if (error)
     return (
-      <div className="flex justify-center h-full items-center">
+      <div className="flex justify-center h-full items-center p-10">
         <JsonErrorCard
           {...{
             message: error.message,
@@ -87,8 +107,9 @@ const ListModelPage = () => {
       </div>
     );
   return (
-    <div className="p-10">
+    <div className="p-10 flex flex-col gap-5">
       <Form
+        title={`Mise à jour dans ${params.model} : ref ${data.id}`}
         inputs={inputs}
         onSubmit={async (data) => {
           const httpClient = new HttpClient();
@@ -102,6 +123,40 @@ const ListModelPage = () => {
             error: response || httpClient.error,
           });
         }}
+        actions={
+          <div>
+            <Button
+              className="shadow-none rounded-none text-sm !bg-gray-200 text-gray-600"
+              variant="primary"
+              onClick={() => router.push(`/list/${params.app}/${params.model}`)}
+            >
+              Annuler
+            </Button>
+            <Button
+              className="shadow-none rounded-none text-sm bg-green-200 text-green-600"
+              variant="primary"
+              type="submit"
+            >
+              Sauvegarder
+            </Button>
+            <Button
+              variant="primary"
+              className="shadow-none rounded-none text-sm bg-red-200 text-red-600"
+              onClick={async () => {
+                setDialogOpen(true);
+              }}
+            >
+              Suprimer
+            </Button>
+            <ConfirmDialog
+              isOpen={isDialogOpen}
+              title="Confirmer de la suppressions"
+              message="Êtes-vous sûr de vouloir supprimer cet enreigistrement ?"
+              onConfirm={handleConfirm}
+              onCancel={() => setDialogOpen(false)}
+            />
+          </div>
+        }
       />
     </div>
   );

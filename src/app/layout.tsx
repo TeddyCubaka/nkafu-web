@@ -30,7 +30,7 @@ export default function RootLayout({
         <AuthGuard>
           <main className="w-screen h-screen flex">
             <Sidebar />
-            <div className=" w-full">{children}</div>
+            <div className=" w-full bg-slate-200 dark:bg-[#14151f]">{children}</div>
           </main>
         </AuthGuard>
       </body>

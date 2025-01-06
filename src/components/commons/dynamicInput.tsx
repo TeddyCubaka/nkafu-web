@@ -139,7 +139,7 @@ const Input = (props: InputType) => {
                   <div
                     key={String(option.value)}
                     className={`flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-200 ${
-                      value.value.includes(option.value)
+                      value?.value?.includes(option.value)
                         ? "bg-gray-300"
                         : "bg-white"
                     }`}

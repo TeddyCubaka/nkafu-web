@@ -3,6 +3,8 @@ import { useState } from "react";
 import { CiCircleAlert, CiCircleCheck, CiCircleRemove } from "react-icons/ci";
 import { FiChevronDown, FiChevronRight, FiClock } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
+import { IoReload } from "react-icons/io5";
+import Button from "../commons/button";
 export type AlertStatus = "success" | "error" | "warning" | "info";
 
 export interface JsonErrorCardProps {
@@ -66,10 +68,17 @@ export const JsonErrorCard = ({
   };
 
   return (
-    <div>
-      <div className="p-5 flex flex-col justify-center items-center gap-5">
+    <div className="border bg-white p-10 rounded-md">
+      <div className="p-5 flex flex-col justify-center items-center gap-5 text-2xl">
+        {status == "error" ? (
+          <Button variant="outline" onClick={() => window.location.reload()}>
+            <IoReload size={30} />
+          </Button>
+        ) : (
+          ""
+        )}
         <h1
-          className={`text-2xl flex gap-2.5 items-center ${colorStyle[status]}`}
+          className={`text-4xl flex gap-2.5 items-center ${colorStyle[status]}`}
         >
           <Icon {...{ status }} /> {code}
         </h1>
@@ -96,7 +105,11 @@ export const JsonErrorCard = ({
                 </span>
               )}
             </span>
-            <span title="fermer" className="text-lg" onClick={() => router.back()}>
+            <span
+              title="fermer"
+              className="text-lg"
+              onClick={() => router.back()}
+            >
               <IoMdClose size={30} />
             </span>
           </div>
