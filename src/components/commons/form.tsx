@@ -2,14 +2,11 @@
 import React, { useState } from "react";
 import { InputType, InputValueType } from "@/types/types";
 import Input from "./dynamicInput";
-import { useParams, useRouter } from "next/navigation";
-import Button from "./button";
-import HttpClient from "@/utils/http-client";
 
 interface FormProps {
   title: string;
-  inputs: InputType[]; // Tableau des champs de formulaire
-  onSubmit: (data: Record<string, any>) => void; // Fonction à appeler lors de la soumission
+  inputs: InputType[];
+  onSubmit: (data: Record<string, any>) => void;
   actions: React.ReactNode;
 }
 

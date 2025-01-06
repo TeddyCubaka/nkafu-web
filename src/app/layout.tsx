@@ -28,9 +28,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${inter_Tight.variable} antialiased`}>
         <AuthGuard>
-          <main className="w-screen h-screen flex">
+          <main className="w-screen h-screen flex overflow-hidden">
             <Sidebar />
-            <div className=" w-full bg-slate-200 dark:bg-[#14151f]">{children}</div>
+            <div className=" w-full bg-slate-200 dark:bg-[#14151f] overflow-y-auto h-full">{children}</div>
           </main>
         </AuthGuard>
       </body>

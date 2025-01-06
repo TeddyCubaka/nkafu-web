@@ -96,7 +96,7 @@ const ListModelPage = () => {
   if (loading) return <Loader />;
   if (error)
     return (
-      <div className="flex justify-center h-full items-center p-10">
+      <div className="flex justify-center h-fit items-center p-10">
         <JsonErrorCard
           {...{
             message: error.message,
@@ -112,9 +112,18 @@ const ListModelPage = () => {
       <Form
         title={`Mise à jour dans ${params.model} : ref ${data.id}`}
         inputs={inputs}
-        onSubmit={async (data) => {
+        onSubmit={async (formData) => {
+          let cleanedData: { [key: string]: any } = {};
+          for (let field in formData) {
+            if (
+              typeof formData[field] == "string" &&
+              formData[field].length == 0
+            )
+              cleanedData[field] == 'null';
+            else cleanedData[field] = formData[field];
+          }
           const httpClient = new HttpClient();
-          const response: any | false = await httpClient.patch(path, data);
+          const response: any | false = await httpClient.patch(path, cleanedData);
           setError({
             code: response?.code || httpClient.error?.code || 500,
             message:
@@ -160,6 +169,12 @@ const ListModelPage = () => {
           </div>
         }
       />
+      <div className="p-8 rounded-md bg-white flex flex-col gap-5">
+        <h2 className="text-xl ">Historisation</h2>
+        <ul className="list-disc px-5">
+          <li>Créé le {new Date(data.createdAt).toLocaleDateString()}</li>
+        </ul>
+      </div>
     </div>
   );
 };

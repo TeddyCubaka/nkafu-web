@@ -37,6 +37,12 @@ const menus: SideBarContent[] = [
         path: "/list/core/action",
         actions: [],
       },
+      {
+        Icon: null,
+        name: "utilisateurs",
+        path: "/list/core/user",
+        actions: [],
+      },
     ],
   },
   {

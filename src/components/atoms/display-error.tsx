@@ -100,7 +100,7 @@ export const JsonErrorCard = ({
         <div>{message}</div>
       </div>
       <div
-        className={`rounded-lg border ${statusStyles[status]} overflow-hidden`}
+        className={`rounded-lg border ${statusStyles[status]}`}
       >
         <div
           className={`px-4 py-3 ${headerStyles[status]} flex items-center justify-between cursor-pointer`}
@@ -141,7 +141,7 @@ export const JsonErrorCard = ({
             {errorDetails && (
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Détails :</h4>
-                <pre className="bg-black/5 p-3 rounded-lg text-sm overflow-x-auto text-wrap">
+                <pre className="bg-black/5 p-3 h-full rounded-lg text-sm overflow-auto text-wrap">
                   {formatJson(errorDetails)}
                 </pre>
               </div>
@@ -150,7 +150,7 @@ export const JsonErrorCard = ({
             {stack && errorDetails?.stack && (
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Stack Trace:</h4>
-                <pre className="bg-black/5 p-3 rounded-lg text-sm overflow-x-auto whitespace-pre-wrap">
+                <pre className="bg-black/5 p-3 rounded-lg text-sm overflow-auto whitespace-pre-wrap">
                   {errorDetails.stack}
                 </pre>
               </div>
