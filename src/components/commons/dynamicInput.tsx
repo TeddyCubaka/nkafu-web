@@ -3,6 +3,7 @@ import { InputOption, InputType } from "@/types/types";
 import HttpClient from "@/utils/http-client";
 import React, { useEffect, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import { IoCloseCircle } from "react-icons/io5";
 
 const Input = (props: InputType) => {
   const {
@@ -19,7 +20,7 @@ const Input = (props: InputType) => {
     setValue,
   } = props;
 
-  const [isChecked, setIsCheckt] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
   const [dynamicOptions, setDynamicOptions] = useState<InputOption[]>(
     options || []
   );
@@ -45,6 +46,32 @@ const Input = (props: InputType) => {
     else fetchOptions();
   }, [endpoint, options]);
 
+  const handleMultiSelectChange = (
+    selectedValue: string | number | readonly string[] | undefined
+  ) => {
+    const currentValues = value?.value || [];
+    let newValue = [...currentValues];
+
+    if (currentValues.includes(selectedValue)) {
+      newValue = newValue.filter((val) => val !== selectedValue); // Désélectionner
+    } else {
+      newValue.push(selectedValue);
+    }
+
+    setValue({ ...value, value: newValue });
+  };
+
+  const handleRemoveSelectedValue = (selectedValue: string) => {
+    const currentValues = value?.value || [];
+    const newValue = currentValues.filter((val: any) => val !== selectedValue);
+    setValue({ ...value, value: newValue });
+  };
+
+  useEffect(() => {
+    if (type === "boolean")
+      setValue({ ...value, value: value?.value || false });
+  }, [type]);
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -68,11 +95,6 @@ const Input = (props: InputType) => {
     setValue({ ...value, value: newValue });
   };
 
-  useEffect(() => {
-    if (type === "boolean")
-      setValue({ ...value, value: value?.value || false });
-  }, [type]);
-
   return (
     <div className="w-full flex flex-col gap-2">
       <label
@@ -85,26 +107,88 @@ const Input = (props: InputType) => {
         {verbose}
       </label>
       <div className="relative w-full">
-        {["select", "multi-select"].includes(type) ? (
-          <select
-            className="w-full rounded border border-stroke bg-gray px-5 py-3 text-lg font-light text-black focus:border-primary focus-visible:outline-none"
-            name={verbose}
-            id={id}
-            value={type === "multi-select" ? value?.value || [] : value?.value}
-            onChange={handleChange}
-            required={!isOptional}
-            multiple={type === "multi-select"} // Ajout de l'attribut multiple pour le type multi-select
-          >
-            <option value="" disabled>
-              ---
-            </option>
-            {dynamicOptions &&
-              dynamicOptions.map((option) => (
+        {type === "multi-select" ? (
+          <>
+            <div className="mb-2 flex flex-wrap gap-2">
+              {Array.isArray(value?.value) &&
+                value?.value?.map((value: string) => (
+                  <span
+                    key={String(value)}
+                    className="flex items-center gap-1 rounded bg-primary text-white px-3 py-1 text-sm"
+                  >
+                    {
+                      dynamicOptions.find((option) => option.value === value)
+                        ?.label
+                    }
+                    <button
+                      type="button"
+                      className="text-white hover:text-gray-200"
+                      onClick={() => {
+                        handleRemoveSelectedValue(String(value));
+                      }}
+                    >
+                      <IoCloseCircle size={16} />
+                    </button>
+                  </span>
+                ))}
+            </div>
+
+            <div className="relative w-full">
+              <div className="max-h-40 overflow-y-auto border border-gray-300 rounded-md">
+                {dynamicOptions.map((option) => (
+                  <div
+                    key={String(option.value)}
+                    className={`flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-200 ${
+                      value.value.includes(option.value)
+                        ? "bg-gray-300"
+                        : "bg-white"
+                    }`}
+                    onClick={() => {
+                      // console.log(option.value);
+                      handleMultiSelectChange(option.value);
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={value?.value?.includes(option.value)}
+                      readOnly
+                      className="h-4 w-4 text-primary focus:ring-primary"
+                    />
+                    <span className="text-sm">{option.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : type === "select" ? (
+          <>
+            <div className="mb-2">
+              {/* {value?.value && (
+                <span className="flex items-center gap-1 rounded bg-primary text-white px-3 py-1 text-sm">
+                  {dynamicOptions.find(
+                    (option) => option.value === value?.value
+                  )?.label || value?.value}
+                </span>
+              )} */}
+            </div>
+            <select
+              className="w-full rounded border border-stroke bg-gray px-5 py-3 text-lg font-light text-black focus:border-primary focus-visible:outline-none"
+              name={verbose}
+              id={id}
+              value={value?.value || ""}
+              onChange={handleChange}
+              required={!isOptional}
+            >
+              <option value="" disabled>
+                ---
+              </option>
+              {dynamicOptions.map((option) => (
                 <option key={String(option.value)} value={option.value}>
-                  {String(option.label)}
+                  {option.label}
                 </option>
               ))}
-          </select>
+            </select>
+          </>
         ) : type === "boolean" ? (
           <input
             type="checkbox"

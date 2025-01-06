@@ -42,7 +42,6 @@ const ListModelPage = () => {
       );
       setInputs(inputValue);
 
-      console.log(inputValue);
       setLoading(false);
     };
 
@@ -63,6 +62,8 @@ const ListModelPage = () => {
         setLoading(false);
         return;
       }
+
+      console.log(data);
 
       setData(data.data);
       setLoading(false);

@@ -13,12 +13,12 @@ const Form: React.FC<FormProps> = ({ inputs, onSubmit }) => {
     () =>
       inputs.reduce((acc, input) => {
         let defaultValue: any;
-        if (input.value.value && input.value.value !== null) {
+        if (input?.value && input.value.value !== null) {
           defaultValue = input.value.value;
         } else if (input.type === "boolean") defaultValue = false;
         else if (input.type === "number" || input.type === "float")
           defaultValue = 0;
-        else defaultValue = ""; // Par défaut, une chaîne vide pour tous les autres types
+        else defaultValue = input.type == "multi-select" ? [] : "";
         acc[input.proprety] = { errorMessage: "", value: defaultValue };
         return acc;
       }, {} as Record<string, InputValueType>)
@@ -31,7 +31,6 @@ const Form: React.FC<FormProps> = ({ inputs, onSubmit }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validation simple
     const errors: Record<string, string> = {};
     const data: Record<string, any> = {};
 
@@ -44,7 +43,6 @@ const Form: React.FC<FormProps> = ({ inputs, onSubmit }) => {
       }
     });
 
-    // Gestion des erreurs ou appel de la fonction de soumission
     if (Object.keys(errors).length > 0) {
       setFormValues((prev) =>
         Object.entries(errors).reduce(
@@ -56,7 +54,7 @@ const Form: React.FC<FormProps> = ({ inputs, onSubmit }) => {
         )
       );
     } else {
-      onSubmit(data); // Appelle la fonction de soumission avec les données du formulaire
+      onSubmit(data);
     }
   };
 
@@ -70,6 +68,7 @@ const Form: React.FC<FormProps> = ({ inputs, onSubmit }) => {
             {...input}
             value={formValues[input.proprety]}
             setValue={(value) => handleInputChange(input.proprety, value)}
+            key={input.proprety}
           />
           {formValues[input.proprety]?.errorMessage && (
             <span className="text-red-500 text-sm">

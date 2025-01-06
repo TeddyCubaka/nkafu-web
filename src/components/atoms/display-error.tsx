@@ -1,6 +1,8 @@
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CiCircleAlert, CiCircleCheck, CiCircleRemove } from "react-icons/ci";
 import { FiChevronDown, FiChevronRight, FiClock } from "react-icons/fi";
+import { IoMdClose } from "react-icons/io";
 export type AlertStatus = "success" | "error" | "warning" | "info";
 
 export interface JsonErrorCardProps {
@@ -30,6 +32,7 @@ export const JsonErrorCard = ({
   stack = false,
 }: JsonErrorCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const router = useRouter();
 
   if (!show) return null;
 
@@ -79,18 +82,23 @@ export const JsonErrorCard = ({
           className={`px-4 py-3 ${headerStyles[status]} flex items-center justify-between cursor-pointer`}
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <div className="flex items-center gap-3">
-            {isExpanded ? (
-              <FiChevronDown className="w-5 h-5" />
-            ) : (
-              <FiChevronRight className="w-5 h-5" />
-            )}
-            <span className="font-medium">{message}</span>
-            {code && (
-              <span className="text-sm px-2 py-1 rounded-full bg-white/50">
-                Code: {code}
-              </span>
-            )}
+          <div className="w-full flex items-center justify-between gap-3">
+            <span className="w-full flex items-center gap-3">
+              {isExpanded ? (
+                <FiChevronDown className="w-5 h-5" />
+              ) : (
+                <FiChevronRight className="w-5 h-5" />
+              )}
+              <span className="font-medium">{message}</span>
+              {code && (
+                <span className="text-sm px-2 py-1 rounded-full bg-white/50">
+                  Code: {code}
+                </span>
+              )}
+            </span>
+            <span title="fermer" className="text-lg" onClick={() => router.back()}>
+              <IoMdClose size={30} />
+            </span>
           </div>
           {timestamp && (
             <div className="flex items-center gap-2 text-sm">
