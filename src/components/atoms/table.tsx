@@ -3,9 +3,9 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FiSearch, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import notElement from "@/../public/window.svg";
-import Button from "../commons/button";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
 import Link from "next/link";
+import { iconsDictionary } from "../store/icon";
+import { IoEllipsisHorizontalSharp } from "react-icons/io5";
 
 export interface DataTableColumnType<T> {
   proprety: string;
@@ -57,7 +57,7 @@ export function DataTable<T extends { id?: string | number }>({
 }: TableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
-  const [filteredData, setFilteredData] = useState<T[]>(data);
+  const [filteredData, setFilteredData] = useState<any[]>(data);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const router = useRouter();
@@ -166,39 +166,50 @@ export function DataTable<T extends { id?: string | number }>({
                       />
                     </td>
                   )}
-                  {columns.map((column) => (
-                    <td
-                      key={`${item.id || index}-${column.proprety}`}
-                      className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 min-w-32"
-                    >
-                      {column.proprety == "url" ? (
-                        <Image
-                          src={
-                            String(item[column.proprety as keyof typeof item])
-                              ? //  &&
-                                // isValidURL(
-                                //   String(item[column.key as keyof typeof item])
-                                // )
-                                String(
-                                  item[column.proprety as keyof typeof item]
-                                )
-                              : notElement
-                          }
-                          width={100}
-                          height={100}
-                          alt="url image"
-                          className="border-2 border-green-500 rounded-md h-16 w-16"
-                        />
-                      ) : (
-                        getNestedValue(
-                          item[column.proprety.split(".")[0] as keyof T],
-                          column.proprety.split(".").length > 1
-                            ? column.proprety.split(".").slice(1).join(".")
-                            : column.proprety
-                        )
-                      )}
-                    </td>
-                  ))}
+                  {columns.map((column) => {
+                    let Icon = IoEllipsisHorizontalSharp;
+                    if (
+                      column.proprety == "icon" &&
+                      item[column.proprety] in iconsDictionary
+                    ) {
+                      Icon = iconsDictionary[item["icon"]].component;
+                    }
+                    return (
+                      <td
+                        key={`${item.id || index}-${column.proprety}`}
+                        className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 min-w-32"
+                      >
+                        {column.proprety == "url" ? (
+                          <Image
+                            src={
+                              String(item[column.proprety as keyof typeof item])
+                                ? //  &&
+                                  // isValidURL(
+                                  //   String(item[column.key as keyof typeof item])
+                                  // )
+                                  String(
+                                    item[column.proprety as keyof typeof item]
+                                  )
+                                : notElement
+                            }
+                            width={100}
+                            height={100}
+                            alt="url image"
+                            className="border-2 border-green-500 rounded-md h-16 w-16"
+                          />
+                        ) : column.proprety == "icon" ? (
+                          <Icon size={20} />
+                        ) : (
+                          getNestedValue(
+                            item[column.proprety.split(".")[0] as keyof T],
+                            column.proprety.split(".").length > 1
+                              ? column.proprety.split(".").slice(1).join(".")
+                              : column.proprety
+                          )
+                        )}
+                      </td>
+                    );
+                  })}
                   <td className="px-4 py-3 whitespace-nowrap w-fit">
                     <Link
                       href={`/change/${params.app}/${params.model}/${item.id}`}

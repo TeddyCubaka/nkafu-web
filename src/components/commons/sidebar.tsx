@@ -35,7 +35,7 @@ const menus: SideBarContent[] = [
       },
       {
         Icon: null,
-        name: "actions dans le système",
+        name: "permissions",
         path: "/list/core/action",
         actions: [],
       },

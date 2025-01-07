@@ -4,6 +4,7 @@ import HttpClient from "@/utils/http-client";
 import React, { useEffect, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
+import { iconsDictionary } from "../store/icon";
 
 const Input = (props: InputType) => {
   const {
@@ -47,14 +48,20 @@ const Input = (props: InputType) => {
     } else {
       fetchOptions();
     }
-
-    // if (setValue && !value?.value) {
-    //   setValue({
-    //     ...value,
-    //     value: type === "multi-select" ? [] : type === "boolean" ? false : null,
-    //   });
-    // }
   }, [endpoint, options, type]);
+
+  useEffect(() => {
+    if (proprety == "icon") {
+      let iconStores: InputOption[] = [];
+      for (let icon in iconsDictionary) {
+        iconStores.push({
+          label: iconsDictionary[icon].name,
+          value: icon,
+        });
+      }
+      setDynamicOptions(iconStores);
+    }
+  }, [proprety]);
 
   const handleMultiSelectChange = (
     selectedValue: string | number | readonly string[] | undefined
@@ -192,7 +199,7 @@ const Input = (props: InputType) => {
               </div>
             </div>
           </>
-        ) : type === "select" ? (
+        ) : proprety == "icon" || type === "select" ? (
           <select
             className="w-full rounded border border-stroke bg-gray px-5 py-3 text-lg font-light text-black focus:border-primary focus-visible:outline-none"
             name={verbose}

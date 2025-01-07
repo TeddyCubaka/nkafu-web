@@ -53,7 +53,7 @@ const CreateModelPage = () => {
   if (loading) return <Loader />;
   if (error)
     return (
-      <div className="flex justify-center h-full items-center flex-col">
+      <div className="flex justify-center h-fit p-8 items-center flex-col">
         <JsonErrorCard
           {...{
             message: error.message,
