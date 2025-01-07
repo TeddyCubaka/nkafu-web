@@ -15,8 +15,6 @@ const TableAction = ({ setRefreshData }: { setRefreshData: () => void }) => {
     <div className="flex gap-2">
       <button
         onClick={() => {
-          // setOpenModal(true);
-          // fetchData();
           router.push(`/create/${params.app}/${params.model}`);
         }}
         className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center gap-2"
@@ -57,9 +55,12 @@ const ListModelPage = () => {
         const data: { code: number; message: string; data: any; meta: any } =
           await httpClient.get(path);
         if (!data && httpClient.error !== null) setError(httpClient.error);
-
-        setMetaData(data.meta);
-        setData(data.data);
+        else if (!data.data && httpClient.error !== null)
+          setError(httpClient.error);
+        else {
+          setMetaData(data.meta);
+          setData(data.data);
+        }
       } catch (error: any) {
         setError({
           code: error.code || 500,

@@ -91,7 +91,7 @@ const CreateModelPage = () => {
               Annuler
             </Button>
             <Button
-              className="shadow-none rounded-none text-sm bg-green-200 text-green-600"
+              className="shadow-none rounded-none text-sm !bg-green-200 text-green-600"
               variant="primary"
               type="submit"
             >

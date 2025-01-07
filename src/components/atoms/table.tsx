@@ -135,15 +135,15 @@ export function DataTable<T extends { id?: string | number }>({
               {columns.map((column) => (
                 <th
                   key={column.proprety}
-                  className={`px-4 py-3 text-left text-sm font-medium text-gray-500 tracking-wider ${
-                    column.width || ""
+                  className={`px-5 py-3 text-left text-sm font-bold text-gray-500 tracking-wider ${
+                    column.proprety == "id" ? "w-40" : column.width || ""
                   }`}
                 >
                   {column.verbose}
                 </th>
               ))}
               <th
-                className={`px-4 py-3 text-left text-sm font-medium text-gray-500 tracking-wider w-40`}
+                className={`px-4 py-3 text-left text-sm font-bold text-gray-500 tracking-wider w-40`}
               >
                 action
               </th>
