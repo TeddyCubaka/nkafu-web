@@ -18,6 +18,7 @@ import {
   FaLandmark,
   FaSearchDollar,
   FaTags,
+  FaUser,
 } from "react-icons/fa";
 
 import {
@@ -49,6 +50,7 @@ import {
   IoMdCart,
   IoIosList,
   IoIosPricetags,
+  IoIosSettings,
 } from "react-icons/io";
 import { IconType } from "react-icons";
 
@@ -93,4 +95,6 @@ export const iconsDictionary: {
   legal: { name: "Legal", component: FaLandmark },
   orders: { name: "Orders", component: IoIosList },
   tags: { name: "Tags", component: FaTags },
+  user: { name: "User", component: FaUser },
+  settings: { name: "Settings", component: IoIosSettings },
 };

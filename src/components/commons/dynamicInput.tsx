@@ -6,21 +6,19 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
 import { iconsDictionary } from "../store/icon";
 
-const Input = (props: InputType) => {
-  const {
-    id,
-    verbose,
-    type,
-    proprety,
-    placeholder,
-    options,
-    endpoint,
-    childrens,
-    isOptional,
-    value,
-    setValue,
-  } = props;
-
+const Input = ({
+  id,
+  verbose,
+  type,
+  proprety,
+  placeholder,
+  options,
+  endpoint,
+  childrens,
+  isOptional,
+  value,
+  setValue,
+}: InputType) => {
   const [dynamicOptions, setDynamicOptions] = useState<InputOption[]>(
     options || []
   );
