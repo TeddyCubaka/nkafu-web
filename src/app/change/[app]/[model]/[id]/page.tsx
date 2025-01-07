@@ -143,7 +143,7 @@ const ListModelPage = () => {
               Annuler
             </Button>
             <Button
-              className="shadow-none rounded-none text-sm bg-green-200 text-green-600 hover:bg-green-300"
+              className="shadow-none rounded-none text-sm !bg-green-200 text-green-600 hover:bg-green-300"
               variant="primary"
               type="submit"
             >

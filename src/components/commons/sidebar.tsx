@@ -5,6 +5,8 @@ import { IconType } from "react-icons";
 import { BsFillFileBarGraphFill } from "react-icons/bs";
 import { FaUserTie } from "react-icons/fa";
 import { IoChevronDownOutline, IoChevronForwardOutline } from "react-icons/io5";
+import appLogo from "@/../public/logo/logo-inline.png";
+import Image from "next/image";
 
 interface SideBarContent {
   name: string;
@@ -58,7 +60,7 @@ const menus: SideBarContent[] = [
       {
         Icon: null,
         name: "se deconnecter",
-        path: "/logout",
+        path: "/auth/login",
         actions: [],
       },
     ],
@@ -87,18 +89,26 @@ const NavSection = ({
       <div
         onClick={() => {
           if (actions.length > 0) setDisplayChildrens(!displayChildrens);
-          else if (path) router.push(path);
+          else if (path) {
+            if (path == "/auth/login") {
+              localStorage.removeItem("dp-sk-moto-user");
+              localStorage.removeItem("dp-sk-moto-token");
+            }
+            router.push(path);
+          }
         }}
         className={
-          "px-2.5 py-2 text-nowrap rounded-md flex gap-2 font-light cursor-pointer hover:bg-gray-200 " +
-          (path == pathname && "border-x-2 border-green-500 bg-gray-100")
+          `px-2.5 py-2 text-nowrap rounded-md flex gap-2 cursor-pointer ${
+            panding > 0 && "hover:translate-x-1"
+          } ${path == pathname && "text-primary !font-bold"} transition-all`
+          // (path == pathname && "border-x-2 border-green-500 bg-gray-100")
         }
         style={{
           marginLeft: `${panding}px`,
         }}
       >
         <span className="flex justify-between w-full items-center gap-3">
-          <span className="flex gap-2 items-center">
+          <span className="flex gap-2 items-center font-extralight">
             {Icon !== null ? <Icon size={16} /> : false} {name}
           </span>
           {actions.length > 0 ? <ChivronComponent /> : false}
@@ -157,9 +167,9 @@ const Sidebar: React.FC = () => {
   if (["/auth/login"].includes(path)) return false;
 
   return (
-    <div className="bg-background text-foreground shadow-md w-1/6 p-5">
-      <div className="container mx-auto flex items-center justify-between mb-5">
-        <h1 className="text-xl font-bold">Digipublic</h1>
+    <div className="bg-background text-foreground shadow-md w-1/5 p-5 flex flex-col gap-10">
+      <div className="container mx-auto flex items-center justify-between my-5">
+        <Image src={appLogo} alt="digipublic logo" width={120} height={70} />
         <button
           onClick={toggleTheme}
           className="flex items-center gap-2 bg-primary text-background px-4 py-2 rounded-md shadow hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"

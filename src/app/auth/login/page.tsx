@@ -103,7 +103,7 @@ const LoginPage = () => {
         {loginForm.map((field) => {
           return <Input {...field} key={field.proprety} />;
         })}
-        <Button isLoading={connecting} className="w-full">
+        <Button type="submit" isLoading={connecting} className="w-full">
           button
         </Button>
       </form>

@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
-import { Inter, Inter_Tight } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { AuthGuard } from "@/components/auth-guard";
 import Sidebar from "@/components/commons/sidebar";
 
-const inter = Inter({
-  variable: "--font-inter",
+const font = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-const inter_Tight = Inter_Tight({
-  variable: "--font-inter-tight",
-  subsets: ["latin"],
-});
+// const inter_Tight = Inter_Tight({
+//   variable: "--font-inter-tight",
+//   subsets: ["latin"],
+// });
 
 export const metadata: Metadata = {
   title: "Digipublic",
@@ -26,11 +27,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${inter_Tight.variable} antialiased`}>
+      <body className={`${font.variable} antialiased`}>
         <AuthGuard>
           <main className="w-screen h-screen flex overflow-hidden">
             <Sidebar />
-            <div className=" w-full bg-slate-200 dark:bg-[#14151f] overflow-y-auto h-full">{children}</div>
+            <div className=" w-full bg-slate-200 dark:bg-[#14151f] overflow-y-auto h-full">
+              {children}
+            </div>
           </main>
         </AuthGuard>
       </body>
