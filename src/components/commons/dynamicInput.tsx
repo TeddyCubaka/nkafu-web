@@ -166,7 +166,7 @@ const Input = ({
                 ))}
             </div>
             <div className="relative w-full">
-              <div className="max-h-40 overflow-y-auto border border-gray-300 rounded-md">
+              <div className="max-h-80 overflow-y-auto border border-gray-300 rounded-md">
                 {dynamicOptions.length === 0 ? (
                   <div className="flex items-center gap-2 px-4 py-2 bg-white text-gray-500">
                     <span className="text-sm">

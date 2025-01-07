@@ -7,75 +7,23 @@ import { FaUserTie } from "react-icons/fa";
 import { IoChevronDownOutline, IoChevronForwardOutline } from "react-icons/io5";
 import appLogo from "@/../public/logo/logo-inline.png";
 import Image from "next/image";
+import { iconsDictionary } from "../store/icon";
+import HttpClient from "@/utils/http-client";
 
-interface SideBarContent {
+type MenuDataType = {
+  id: string;
   name: string;
-  Icon: IconType | null;
+  icon: string;
   path?: string;
-  actions: SideBarContent[];
+  actions: { id: string; name: string; icon: string; path?: string }[];
+};
+interface SideBarContent extends MenuDataType {
   panding?: number;
 }
 
-const menus: SideBarContent[] = [
-  {
-    Icon: BsFillFileBarGraphFill,
-    name: "tableau de bord",
-    path: "/",
-    actions: [],
-  },
-  {
-    Icon: FaUserTie,
-    name: "settings",
-    actions: [
-      {
-        Icon: null,
-        name: "Menus",
-        path: "/list/core/menu",
-        actions: [],
-      },
-      {
-        Icon: null,
-        name: "permissions",
-        path: "/list/core/action",
-        actions: [],
-      },
-      {
-        Icon: null,
-        name: "roles",
-        path: "/list/core/role",
-        actions: [],
-      },
-      {
-        Icon: null,
-        name: "utilisateurs",
-        path: "/list/core/user",
-        actions: [],
-      },
-    ],
-  },
-  {
-    Icon: FaUserTie,
-    name: "profile",
-    actions: [
-      {
-        Icon: null,
-        name: "change le mot de passe",
-        path: "/change/auth/password",
-        actions: [],
-      },
-      {
-        Icon: null,
-        name: "se deconnecter",
-        path: "/auth/login",
-        actions: [],
-      },
-    ],
-  },
-];
-
 const NavSection = ({
   name,
-  Icon,
+  icon,
   path,
   actions,
   panding = 0,
@@ -90,6 +38,7 @@ const NavSection = ({
   };
   const router = useRouter();
   const pathname = usePathname();
+  const Icon: IconType | null = iconsDictionary[icon]?.component || null;
   return (
     <>
       <div
@@ -126,6 +75,8 @@ const NavSection = ({
             return (
               <NavSection
                 {...subMenu}
+                icon={""}
+                actions={[]}
                 key={subMenu.path}
                 panding={panding + 30}
               />
@@ -142,6 +93,13 @@ const NavSection = ({
 const Sidebar: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const path = usePathname();
+  const [menus, setMenus] = useState<MenuDataType[]>([]);
+  const [error, setError] = useState<{
+    code: number;
+    message: string;
+    [key: string]: any;
+  }>();
+  const [loading, setLoading] = useState(true);
 
   const toggleTheme = () => {
     const html = document.documentElement;
@@ -171,6 +129,31 @@ const Sidebar: React.FC = () => {
   }, []);
 
   if (["/auth/login"].includes(path)) return false;
+
+  useEffect(() => {
+    const requester = async () => {
+      try {
+        setLoading(true);
+        const httpClient = new HttpClient();
+        const data: { code: number; message: string; data: MenuDataType[] } =
+          await httpClient.get("load/menu");
+        if (!data && httpClient.error !== null) setError(httpClient.error);
+        else if (!data.data && httpClient.error !== null)
+          setError(httpClient.error);
+        else {
+          setMenus(data.data);
+        }
+      } catch (error: any) {
+        setError({
+          code: error.code || 500,
+          message: error.message || "une erreur s'est produite",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    requester();
+  }, []);
 
   return (
     <div className="bg-background text-foreground shadow-md w-1/5 p-5 flex flex-col gap-10">

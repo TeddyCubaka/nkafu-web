@@ -40,12 +40,12 @@ const ListModelPage = () => {
     message: string;
     [key: string]: any;
   }>();
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>([]);
   const [metaData, setMetaData] = useState<{
     listColumns: DataTableColumnType<{ id?: string | number | undefined }>[];
   }>();
   const [refreshData, setRefreshData] = useState(true);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const requester = async () => {
