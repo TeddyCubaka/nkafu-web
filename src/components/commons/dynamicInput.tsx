@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
 import { iconsDictionary } from "../store/icon";
+import Loader from "../atoms/loader";
 
 const Input = ({
   id,
@@ -23,8 +24,10 @@ const Input = ({
     options || []
   );
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setLoading(true);
     const fetchOptions = async () => {
       if (endpoint) {
         try {
@@ -46,6 +49,7 @@ const Input = ({
     } else {
       fetchOptions();
     }
+    setLoading(false);
   }, [endpoint, options, type]);
 
   useEffect(() => {
@@ -129,6 +133,15 @@ const Input = ({
 
     setValue({ ...value, value: newValue });
   };
+
+  if (loading)
+    return (
+      <div className=" w-full h-full min-h-40 flex items-center justify-center">
+        <div className="flex flex-col justify-center items-center gap-5 w-full h-full">
+          <span className="pulse w-8 h-8"></span>
+        </div>
+      </div>
+    );
 
   return (
     <div className="w-full flex flex-col gap-2">
