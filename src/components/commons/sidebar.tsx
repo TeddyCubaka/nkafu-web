@@ -2,8 +2,6 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
-import { BsFillFileBarGraphFill } from "react-icons/bs";
-import { FaUserTie } from "react-icons/fa";
 import { IoChevronDownOutline, IoChevronForwardOutline } from "react-icons/io5";
 import appLogo from "@/../public/logo/logo-inline.png";
 import Image from "next/image";
@@ -128,8 +126,6 @@ const Sidebar: React.FC = () => {
     }
   }, []);
 
-  if (["/auth/login"].includes(path)) return false;
-
   useEffect(() => {
     const requester = async () => {
       try {
@@ -155,6 +151,8 @@ const Sidebar: React.FC = () => {
     requester();
   }, []);
 
+  if (["/auth/login"].includes(path)) return false;
+  
   return (
     <div className="bg-background text-foreground shadow-md w-1/5 p-5 flex flex-col gap-10">
       <div className="container mx-auto flex items-center justify-between my-5">
