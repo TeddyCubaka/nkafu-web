@@ -59,7 +59,7 @@ export function DataTable<T extends { id?: string | number }>({
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
   const [filteredData, setFilteredData] = useState<any[]>(data);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 15;
   const router = useRouter();
   const path = usePathname();
   const params: { app: string; model: string } = useParams();
