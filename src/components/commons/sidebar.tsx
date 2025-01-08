@@ -52,7 +52,7 @@ const NavSection = ({
         }}
         className={
           `px-2.5 py-2 text-nowrap rounded-md flex gap-2 cursor-pointer ${
-            panding > 0 && "hover:translate-x-1"
+            panding > 0 ? "hover:translate-x-1" : 'hover:bg-gray-100 dark:hover:bg-slate-500'
           } ${path == pathname && "text-primary !font-bold"} transition-all`
           // (path == pathname && "border-x-2 border-green-500 bg-gray-100")
         }
