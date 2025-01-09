@@ -97,4 +97,9 @@ export const iconsDictionary: {
   tags: { name: "Tags", component: FaTags },
   user: { name: "User", component: FaUser },
   settings: { name: "Settings", component: IoIosSettings },
+  userTie: { name: "userTie", component: FaUserTie },
+  attachMoney: { name: "attachMoney", component: MdAttachMoney },
+  outlineReport: { name: "outlineReport", component: MdOutlineReport },
+  localShipping: { name: "localShipping", component: MdLocalShipping },
+  cart: { name: "cart", component: IoMdCart },
 };

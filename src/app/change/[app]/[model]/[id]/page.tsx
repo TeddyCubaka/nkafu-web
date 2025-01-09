@@ -50,7 +50,7 @@ const ListModelPage = () => {
     };
 
     requester();
-  }, [data]);
+  }, [data, params.app, params.model]);
 
   useEffect(() => {
     // fetch data
@@ -72,7 +72,7 @@ const ListModelPage = () => {
     };
 
     requester();
-  }, []);
+  }, [params.app, params.model, params.id]);
 
   const [isDialogOpen, setDialogOpen] = useState(false);
 
@@ -113,17 +113,20 @@ const ListModelPage = () => {
         title={`Mise à jour dans ${params.model} : ref ${data.id}`}
         inputs={inputs}
         onSubmit={async (formData) => {
-          let cleanedData: { [key: string]: any } = {};
-          for (let field in formData) {
+          const cleanedData: { [key: string]: any } = {};
+          for (const field in formData) {
             if (
               typeof formData[field] == "string" &&
               formData[field].length == 0
             )
-              cleanedData[field] == 'null';
+              cleanedData[field] == "null";
             else cleanedData[field] = formData[field];
           }
           const httpClient = new HttpClient();
-          const response: any | false = await httpClient.patch(path, cleanedData);
+          const response: any | false = await httpClient.patch(
+            path,
+            cleanedData
+          );
           setError({
             code: response?.code || httpClient.error?.code || 500,
             message:

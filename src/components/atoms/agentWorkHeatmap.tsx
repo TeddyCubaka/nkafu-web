@@ -42,7 +42,10 @@ function generateRandomDates(year: number, count: number): string[] {
 }
 
 const AgentWorkHeatmap: React.FC<{ workData: WorkData }> = ({ workData }) => {
-  const { year, daysWorked } = workData;
+  const {
+    year,
+    //  daysWorked
+  } = workData;
 
   const days = new Set(generateRandomDates(2025, 10));
 

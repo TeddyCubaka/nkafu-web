@@ -1,7 +1,6 @@
 "use client";
 import { JsonErrorCard } from "@/components/atoms/display-error";
 import Loader from "@/components/atoms/loader";
-import { DataTable, DataTableColumnType } from "@/components/atoms/table";
 import Button from "@/components/commons/button";
 import Form from "@/components/commons/form";
 import { InputType } from "@/types/types";
@@ -21,12 +20,7 @@ const CreateModelPage = () => {
       }
     | undefined
   >(undefined);
-  const [data, setData] = useState<any>([]);
   const [inputs, setInputs] = useState<InputType[]>([]);
-  const [metaData, setMetaData] = useState<{
-    listColumns: DataTableColumnType<{ id?: string | number | undefined }>[];
-  }>();
-
   const params: { app: string; model: string } = useParams();
 
   useEffect(() => {
@@ -48,7 +42,7 @@ const CreateModelPage = () => {
     };
 
     requester();
-  }, []);
+  }, [params.app, params.model]);
 
   if (loading) return <Loader />;
   if (error)

@@ -1,5 +1,5 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import { IoChevronDownOutline, IoChevronForwardOutline } from "react-icons/io5";
@@ -35,7 +35,7 @@ const NavSection = ({
       <IoChevronForwardOutline />
     );
   };
-  const router = useRouter();
+
   const pathname = usePathname();
   const Icon: IconType | null = iconsDictionary[icon]?.component || null;
   return (
@@ -152,6 +152,9 @@ const Sidebar: React.FC = () => {
   }, []);
 
   if (["/auth/login"].includes(path)) return false;
+
+  if (loading) return <span>loading...</span>;
+  if (error) return <span>{error.message}</span>;
 
   return (
     <div className="bg-background text-foreground shadow-md w-1/5 p-5 flex flex-col gap-10">

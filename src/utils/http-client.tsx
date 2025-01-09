@@ -1,5 +1,3 @@
-import { useRouter } from "next/navigation";
-
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 class HttpClient {

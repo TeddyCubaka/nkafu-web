@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FiSearch, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import notElement from "@/../public/window.svg";
@@ -114,7 +114,7 @@ export function DataTable<T extends { id?: string | number }>({
     } else {
       setFilteredData(data);
     }
-  }, [searchTerm, data, searchable, searchKeys]);
+  }, [searchTerm, data, searchable, searchKeys, columns]);
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.checked ? filteredData : [];

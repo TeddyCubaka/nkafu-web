@@ -1,19 +1,15 @@
 "use client";
 import AgentWorkHeatmap from "@/components/atoms/agentWorkHeatmap";
-import ConfirmDialog from "@/components/atoms/dialog";
 import { JsonErrorCard } from "@/components/atoms/display-error";
 import Loader from "@/components/atoms/loader";
 import Button from "@/components/commons/button";
-import Form from "@/components/commons/form";
 import { Agent } from "@/types/agent.type";
-import { InputType } from "@/types/types";
 import HttpClient from "@/utils/http-client";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoChevronBackOutline, IoWarning } from "react-icons/io5";
 
 const ListModelPage = () => {
-  const path = usePathname();
   const params: { app: string; model: string; id: string } = useParams();
   const router = useRouter();
 
@@ -43,7 +39,7 @@ const ListModelPage = () => {
     };
 
     requester();
-  }, []);
+  }, [params.app, params.id]);
 
   const workData = {
     year: 2025,
@@ -214,7 +210,7 @@ const ListModelPage = () => {
           </div>
           <div className="p-8 bg-background rounded-md flex flex-col gap-5 flex-1">
             <h2 className="text-xl font-[700]">
-              Portes-feuilles virtuel de l'agent :
+              Portes-feuilles des recoltes des taxes de l&apos;agent :
             </h2>
             <div className="w-1/2 flex gap-8">
               {data.wallets.length == 0 && (

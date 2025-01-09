@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
 import { iconsDictionary } from "../store/icon";
-import Loader from "../atoms/loader";
 
 const Input = ({
   id,
@@ -15,7 +14,7 @@ const Input = ({
   placeholder,
   options,
   endpoint,
-  childrens,
+  // childrens,
   isOptional,
   value,
   setValue,
@@ -64,8 +63,8 @@ const Input = ({
 
   useEffect(() => {
     if (proprety == "icon") {
-      let iconStores: InputOption[] = [];
-      for (let icon in iconsDictionary) {
+      const iconStores: InputOption[] = [];
+      for (const icon in iconsDictionary) {
         iconStores.push({
           label: iconsDictionary[icon].name,
           value: icon,
@@ -120,7 +119,7 @@ const Input = ({
         setValue({ ...value, value: 0 });
       }
     }
-  }, [type]);
+  }, [type, value, setValue]);
 
   const handleChange = (
     e: React.ChangeEvent<

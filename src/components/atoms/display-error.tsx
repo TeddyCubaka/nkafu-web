@@ -42,6 +42,7 @@ export const JsonErrorCard = ({
     try {
       return JSON.stringify(data, null, 2);
     } catch (e) {
+      console.log(e);
       return String(data);
     }
   };
@@ -99,9 +100,7 @@ export const JsonErrorCard = ({
         </h1>
         <div>{message}</div>
       </div>
-      <div
-        className={`rounded-lg border ${statusStyles[status]}`}
-      >
+      <div className={`rounded-lg border ${statusStyles[status]}`}>
         <div
           className={`px-4 py-3 ${headerStyles[status]} flex items-center justify-between cursor-pointer`}
           onClick={() => setIsExpanded(!isExpanded)}

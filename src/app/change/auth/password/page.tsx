@@ -1,12 +1,11 @@
 "use client";
-import ConfirmDialog from "@/components/atoms/dialog";
 import { JsonErrorCard } from "@/components/atoms/display-error";
 import Loader from "@/components/atoms/loader";
 import Button from "@/components/commons/button";
 import Form from "@/components/commons/form";
 import { InputType } from "@/types/types";
 import HttpClient from "@/utils/http-client";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ListModelPage = () => {
@@ -66,8 +65,8 @@ const ListModelPage = () => {
         title={`Mise a jour du mot de passe`}
         inputs={inputs}
         onSubmit={async (formData) => {
-          let cleanedData: { [key: string]: any } = {};
-          for (let field in formData) {
+          const cleanedData: { [key: string]: any } = {};
+          for (const field in formData) {
             if (
               typeof formData[field] == "string" &&
               formData[field].length == 0
