@@ -1,4 +1,4 @@
-export interface User {
+export interface ConnectedUser {
   id: string;
   name: string;
   mail: string | null;
@@ -22,6 +22,10 @@ export interface User {
   };
   userDevices: any[]; // Spécifier un type plus précis si nécessaire
   agent: Agent;
+  role: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface Agent {

@@ -6,8 +6,10 @@ import Image from "next/image";
 import { FormEvent, useState } from "react";
 import image from "@/../public/logo/icon.png";
 import HttpClient from "@/utils/http-client";
-import { ConnectUser } from "@/types/connected-user";
 import { useRouter } from "next/navigation";
+import { ConnectedUser } from "@/types/connected-user";
+import { useStore } from "zustand";
+import { connectedUserStore } from "@/components/store/connectedUser";
 
 const LoginPage = () => {
   const [connecting, setConnecting] = useState<boolean>(false);
@@ -29,6 +31,8 @@ const LoginPage = () => {
     message: string;
     [key: string]: any;
   } | null>(null);
+
+  const userStore = useStore(connectedUserStore);
 
   const router = useRouter();
 
@@ -72,10 +76,11 @@ const LoginPage = () => {
       setConnecting(false);
       return;
     }
-    const user: ConnectUser = data.data;
+    const user: ConnectedUser = data.data;
 
     localStorage.setItem("dp-sk-moto-user", JSON.stringify(user));
     localStorage.setItem("dp-sk-moto-token", JSON.stringify(data.access_token));
+    userStore.setter(user);
     setConnecting(false);
     router.push("/");
   };
