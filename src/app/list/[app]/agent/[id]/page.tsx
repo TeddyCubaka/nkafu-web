@@ -218,14 +218,14 @@ const ListModelPage = () => {
             </h2>
             <div className="w-1/2 flex gap-8">
               {data.wallets.length == 0 && (
-                <div className="p-2 flex items-center justify-center rounded-md bg-slate-200 dark:bg-bg-secondary w-[300px] h-40">
+                <div className="p-2 flex items-center justify-center rounded-md bg-bg-secondary w-[300px] h-40">
                   Aucune porte-feuille pour l&apos;instant
                 </div>
               )}
               {data.wallets.map((wallet) => {
                 return (
                   <div
-                    className="border p-2 flex items-start rounded-md bg-slate-200 dark:bg-[#14151f] w-[300px]"
+                    className="p-2 flex items-start rounded-md bg-bg-secondary w-[300px]"
                     key={wallet.id}
                   >
                     <div className="flex items-end p-5 flex-1 gap-5">
@@ -234,7 +234,7 @@ const ListModelPage = () => {
                       </span>
                       <span>{wallet.currency.formatKey}</span>
                     </div>
-                    <span className="border px-2 py-1 text-sm bg-green-200 text-green-800 rounded-full cursor-pointer hover:bg-green-300 transition-all hover:shadow-sm">
+                    <span className="px-3 py-1 text-sm bg-green-200 text-green-800 rounded-full cursor-pointer hover:bg-green-300 transition-all hover:shadow-sm">
                       liquider
                     </span>
                   </div>

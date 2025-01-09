@@ -32,9 +32,19 @@ const Input = ({
       if (endpoint) {
         try {
           const httpClient = new HttpClient();
-          const data: any = await httpClient.get(endpoint);
-          if (data.code === 200) {
-            setDynamicOptions(data.data);
+          const data: { code: number; message: string; data?: InputOption[] } =
+            await httpClient.get(endpoint);
+          if (data.code === 200 && data.data) {
+            setDynamicOptions(
+              data.data.sort((a, b) => {
+                const labelA = a.label.toString().toLowerCase();
+                const labelB = b.label.toString().toLowerCase();
+
+                if (labelA < labelB) return -1;
+                else if (labelA > labelB) return 1;
+                else return 0;
+              })
+            );
           } else {
             setDynamicOptions([]);
           }
@@ -181,7 +191,7 @@ const Input = ({
             <div className="relative w-full">
               <div className="max-h-80 overflow-y-auto border border-bg-secondary rounded-md">
                 {dynamicOptions.length === 0 ? (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-background text-gray-500">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-background text-foreground">
                     <span className="text-sm">
                       Aucune donnée pour l&apos;instant
                     </span>
@@ -190,7 +200,7 @@ const Input = ({
                   dynamicOptions.map((option) => (
                     <div
                       key={String(option.value)}
-                      className={`flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-200 ${
+                      className={`flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-bg-secondary text-foreground focus:border-background ${
                         value?.value?.includes(option.value)
                           ? "bg-bg-secondary"
                           : "bg-background"
@@ -212,7 +222,7 @@ const Input = ({
           </>
         ) : proprety == "icon" || type === "select" ? (
           <select
-            className="w-full rounded border border-stroke bg-gray px-5 py-3 text-lg font-light text-black focus:border-primary focus-visible:outline-none"
+            className="w-full rounded border border-stroke bg-gray px-5 py-3 text-lg bg-bg-secondary text-foreground focus:border-background focus-visible:outline-none"
             name={verbose}
             id={id}
             value={value?.value || ""}
@@ -236,7 +246,7 @@ const Input = ({
             checked={!!value?.value}
             onChange={handleChange}
             required={!isOptional}
-            className="h-5 w-5 rounded-full border-gray-300 text-primary focus:ring-primary"
+            className="h-5 w-5 rounded-full border-gray-300 bg-bg-secondary text-foreground focus:border-background focus:ring-primary"
           />
         ) : (
           <div className="relative">

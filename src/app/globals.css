@@ -8,15 +8,16 @@
   /* --primary-color: #048996; */
   --bg-secondary: #e2e8f0;
   --primary: #048996;
+  --color-text: #4b5563;
 }
 
 .dark {
   --background: #010418;
-  --foreground: #ffffff;
   --bg-secondary: #1e202e;
+  --foreground: #ffffff;
   /* --primary-color: #00d1b2; */
   --primary: #048996;
-
+  --color-text: #9ca3af;
 }
 
 body {
@@ -27,7 +28,7 @@ body {
 
 /* Ajout d'une classe pour s'assurer que le texte prend la couleur du foreground */
 .text-foreground {
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .pulse {

@@ -60,8 +60,6 @@ export function DataTable<T extends { id?: string | number }>({
   const [filteredData, setFilteredData] = useState<any[]>(data);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
-  const router = useRouter();
-  const path = usePathname();
   const params: { app: string; model: string } = useParams();
 
   useEffect(() => {
@@ -76,7 +74,7 @@ export function DataTable<T extends { id?: string | number }>({
     } else {
       setFilteredData(data);
     }
-  }, [searchTerm, data, searchable, searchKeys]);
+  }, [searchTerm, data, searchable, searchKeys, setFilteredData]);
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.checked ? filteredData : [];
@@ -103,11 +101,11 @@ export function DataTable<T extends { id?: string | number }>({
         <div className="flex justify-between items-center gap-4 mb-4">
           {searchable && (
             <div className="relative flex-1">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" />
               <input
                 type="text"
                 placeholder="Rechercher..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 border-background bg-background text-foreground"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -118,15 +116,15 @@ export function DataTable<T extends { id?: string | number }>({
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="overflow-x-auto rounded-lg border border-background">
+        <table className="min-w-full divide-y divide-bg-secondary">
+          <thead className="bg-background">
             <tr>
               {selectable && (
                 <th className="w-12 px-4 py-3">
                   <input
                     type="checkbox"
-                    className="rounded border-gray-300"
+                    className="rounded border-bg-secondary bg-bg-secondary text-foreground"
                     checked={selectedRows.length === filteredData.length}
                     onChange={handleSelectAll}
                   />
@@ -135,7 +133,7 @@ export function DataTable<T extends { id?: string | number }>({
               {columns.map((column) => (
                 <th
                   key={column.proprety}
-                  className={`px-5 py-3 text-left text-sm font-bold text-gray-500 tracking-wider ${
+                  className={`px-5 py-3 text-left text-sm font-bold text-gray-600 dark:text-gray-400 tracking-wider ${
                     column.proprety == "id" ? "w-40" : column.width || ""
                   }`}
                 >
@@ -143,18 +141,18 @@ export function DataTable<T extends { id?: string | number }>({
                 </th>
               ))}
               <th
-                className={`px-4 py-3 text-left text-sm font-bold text-gray-500 tracking-wider w-40`}
+                className={`px-4 py-3 text-left text-sm font-bold text-gray-600 dark:text-gray-400 tracking-wider w-40`}
               >
                 action
               </th>
             </tr>
           </thead>
-          <tbody className="bg-background divide-y divide-gray-200">
+          <tbody className="bg-background divide-y divide-bg-secondary">
             {currentData.map((item, index) => {
               return (
                 <tr
                   key={item.id || index}
-                  className="hover:bg-gray-50 transition-colors"
+                  className="hover:bg-bg-secondary transition-colors"
                 >
                   {selectable && (
                     <td className="px-4 py-3 whitespace-nowrap">
@@ -177,7 +175,7 @@ export function DataTable<T extends { id?: string | number }>({
                     return (
                       <td
                         key={`${item.id || index}-${column.proprety}`}
-                        className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 min-w-32"
+                        className="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400 min-w-32"
                       >
                         {column.proprety == "url" ? (
                           <Image
