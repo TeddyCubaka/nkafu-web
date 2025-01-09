@@ -40,30 +40,12 @@ function isValidUrlRegex(url: string): boolean {
   return urlPattern.test(url);
 }
 
-// function getNestedValue(obj: any, path: string): any {
-//   if (typeof obj == "boolean") return obj ? "oui" : "non";
-//   if (!obj || !path) return "_____";
-//   if (typeof obj == "string") return obj;
-//   if (typeof obj == "number") return obj;
-
-//   const keys = path.split(".");
-//   let current: any = obj;
-
-//   for (const key of keys) {
-//     if (current[key] === undefined) {
-//       return "----";
-//     }
-//     current = current[key];
-//   }
-
-//   return current;
-// }
-
 function getNestedValue(obj: any, path: string): any {
   if (typeof obj === "boolean") return obj ? "oui" : "non";
   if (!obj || !path) return "_____";
   if (typeof obj === "string") return obj;
   if (typeof obj === "number") return obj;
+  if (obj == null) return '----';
 
   const keys = path.split(".");
   let current: any = obj;
@@ -139,18 +121,24 @@ export function DataTable<T extends { id?: string | number }>({
     <div className="w-full">
       <div className="mb-6">
         <div className="flex justify-between items-center gap-4 mb-4">
-          {searchable && (
-            <div className="relative flex-1">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" />
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 border-background bg-background text-foreground"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          )}
+          <div
+            className={`"w-full flex-1 flex items-center px-4 py-2 text-foreground focus:outline-none focus:ring-2 rounded-lg gap-4 ${
+              searchable ? "bg-background border-background" : ""
+            }`}
+          >
+            {searchable && (
+              <>
+                <FiSearch size={20} />
+                <input
+                  type="text"
+                  placeholder="Rechercher..."
+                  className="w-full  outline-none"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </>
+            )}
+          </div>
           {filters}
           {actions}
         </div>
