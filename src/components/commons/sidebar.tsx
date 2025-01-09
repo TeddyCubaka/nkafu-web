@@ -7,6 +7,7 @@ import appLogo from "@/../public/logo/logo-inline.png";
 import Image from "next/image";
 import { iconsDictionary } from "../store/icon";
 import HttpClient from "@/utils/http-client";
+import Link from "next/link";
 
 type MenuDataType = {
   id: string;
@@ -39,23 +40,22 @@ const NavSection = ({
   const Icon: IconType | null = iconsDictionary[icon]?.component || null;
   return (
     <>
-      <div
+      <Link
+        href={path || ""}
         onClick={() => {
           if (actions.length > 0) setDisplayChildrens(!displayChildrens);
           else if (path) {
-            if (path == "/auth/login") {
+            if (path == "/auth/logout") {
               localStorage.removeItem("dp-sk-moto-user");
               localStorage.removeItem("dp-sk-moto-token");
             }
-            router.push(path);
           }
         }}
-        className={
-          `px-2.5 py-2 text-nowrap rounded-md flex gap-2 cursor-pointer ${
-            panding > 0 ? "hover:translate-x-1" : 'hover:bg-gray-100 dark:hover:bg-slate-500'
-          } ${path == pathname && "text-primary !font-bold"} transition-all`
-          // (path == pathname && "border-x-2 border-green-500 bg-gray-100")
-        }
+        className={`px-2.5 py-2 text-nowrap rounded-md flex gap-2 cursor-pointer ${
+          panding > 0
+            ? "hover:translate-x-1"
+            : "hover:bg-gray-100 dark:hover:bg-slate-500"
+        } ${path == pathname && "text-primary !font-bold"} transition-all`}
         style={{
           marginLeft: `${panding}px`,
         }}
@@ -66,7 +66,7 @@ const NavSection = ({
           </span>
           {actions.length > 0 ? <ChivronComponent /> : false}
         </span>
-      </div>
+      </Link>
       {displayChildrens && actions.length > 0 ? (
         <>
           {actions.map((subMenu) => {
@@ -152,7 +152,7 @@ const Sidebar: React.FC = () => {
   }, []);
 
   if (["/auth/login"].includes(path)) return false;
-  
+
   return (
     <div className="bg-background text-foreground shadow-md w-1/5 p-5 flex flex-col gap-10">
       <div className="container mx-auto flex items-center justify-between my-5">
@@ -164,7 +164,7 @@ const Sidebar: React.FC = () => {
           {isDarkMode ? <>🌙</> : <>☀️</>}
         </button>
       </div>
-      <nav className="flex flex-col gap-2">
+      <nav className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto">
         {menus.map((menu) => (
           <NavSection {...menu} key={menu.name} />
         ))}

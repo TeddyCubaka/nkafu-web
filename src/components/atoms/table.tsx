@@ -26,11 +26,44 @@ export interface TableProps<T> {
   className?: string;
 }
 
+function isValidUrlRegex(url: string): boolean {
+  const urlPattern = new RegExp(
+    "^(https?:\\/\\/)" + // Protocole (http ou https)
+      "((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,}|" + // Nom de domaine
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OU une adresse IP (v4)
+      "(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*" + // Port et chemin
+      "(\\?[;&a-zA-Z\\d%_.~+=-]*)?" + // Query string
+      "(\\#[-a-zA-Z\\d_]*)?$", // Fragment
+    "i"
+  );
+
+  return urlPattern.test(url);
+}
+
+// function getNestedValue(obj: any, path: string): any {
+//   if (typeof obj == "boolean") return obj ? "oui" : "non";
+//   if (!obj || !path) return "_____";
+//   if (typeof obj == "string") return obj;
+//   if (typeof obj == "number") return obj;
+
+//   const keys = path.split(".");
+//   let current: any = obj;
+
+//   for (const key of keys) {
+//     if (current[key] === undefined) {
+//       return "----";
+//     }
+//     current = current[key];
+//   }
+
+//   return current;
+// }
+
 function getNestedValue(obj: any, path: string): any {
-  if (typeof obj == "boolean") return obj ? "oui" : "non";
+  if (typeof obj === "boolean") return obj ? "oui" : "non";
   if (!obj || !path) return "_____";
-  if (typeof obj == "string") return obj;
-  if (typeof obj == "number") return obj;
+  if (typeof obj === "string") return obj;
+  if (typeof obj === "number") return obj;
 
   const keys = path.split(".");
   let current: any = obj;
@@ -64,9 +97,16 @@ export function DataTable<T extends { id?: string | number }>({
 
   useEffect(() => {
     if (searchable && searchTerm) {
+      const validatedSearchKeys =
+        searchKeys.length > 0
+          ? searchKeys
+          : columns
+          ? columns.map((column) => column.proprety)
+          : [];
+
       const filtered = data.filter((item) =>
-        searchKeys.some((key) => {
-          const value = item[key];
+        validatedSearchKeys.some((key) => {
+          const value = getNestedValue(item, key as string);
           return String(value).toLowerCase().includes(searchTerm.toLowerCase());
         })
       );
@@ -74,7 +114,7 @@ export function DataTable<T extends { id?: string | number }>({
     } else {
       setFilteredData(data);
     }
-  }, [searchTerm, data, searchable, searchKeys, setFilteredData]);
+  }, [searchTerm, data, searchable, searchKeys]);
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.checked ? filteredData : [];
@@ -175,12 +215,19 @@ export function DataTable<T extends { id?: string | number }>({
                     return (
                       <td
                         key={`${item.id || index}-${column.proprety}`}
-                        className="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400 min-w-32"
+                        className="px-4 py-3"
                       >
-                        {column.proprety == "url" ? (
+                        {["url", "photo"].includes(column.proprety) ? (
                           <Image
                             src={
-                              String(item[column.proprety as keyof typeof item])
+                              String(
+                                item[column.proprety as keyof typeof item]
+                              ) &&
+                              isValidUrlRegex(
+                                String(
+                                  item[column.proprety as keyof typeof item]
+                                )
+                              )
                                 ? String(
                                     item[column.proprety as keyof typeof item]
                                   )
@@ -193,6 +240,13 @@ export function DataTable<T extends { id?: string | number }>({
                           />
                         ) : column.proprety == "icon" ? (
                           <Icon size={20} />
+                        ) : column.proprety == "wallets" ? (
+                          <span>
+                            {item[column.proprety as keyof typeof item][0]
+                              ? item[column.proprety as keyof typeof item][0]
+                                  .solde
+                              : "---"}
+                          </span>
                         ) : (
                           getNestedValue(
                             item[column.proprety.split(".")[0] as keyof T],
@@ -223,7 +277,7 @@ export function DataTable<T extends { id?: string | number }>({
 
       {totalPages > -1 && (
         <div className="flex items-center justify-between mt-4 px-4">
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-foreground">
             Affichage {startIndex + 1} à{" "}
             {Math.min(endIndex, filteredData.length)} sur {filteredData.length}{" "}
             entrées
@@ -232,19 +286,19 @@ export function DataTable<T extends { id?: string | number }>({
             <button
               onClick={() => setCurrentPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
+              className="p-2 rounded-md hover:bg-bg-secondary disabled:opacity-50"
             >
-              <FiChevronLeft className="w-5 h-5" />
+              <FiChevronLeft className="w-5 h-5 text-foreground" />
             </button>
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-foreground">
               Page {currentPage} sur {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50"
+              className="p-2 rounded-md hover:bg-bg-secondary disabled:opacity-50"
             >
-              <FiChevronRight className="w-5 h-5" />
+              <FiChevronRight className="w-5 h-5 text-foreground" />
             </button>
           </div>
         </div>
