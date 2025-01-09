@@ -31,7 +31,7 @@ export default function RootLayout({
         <AuthGuard>
           <main className="w-screen h-screen flex overflow-hidden">
             <Sidebar />
-            <div className=" w-full bg-slate-200 dark:bg-[#14151f] overflow-y-auto h-full">
+            <div className=" w-full bg-bg-secondary overflow-y-auto h-full">
               {children}
             </div>
           </main>

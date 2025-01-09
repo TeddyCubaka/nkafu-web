@@ -8,9 +8,16 @@ interface FormProps {
   inputs: InputType[];
   onSubmit: (data: Record<string, any>) => void;
   actions: React.ReactNode;
+  topInputsBlock?: React.ReactNode;
 }
 
-const Form: React.FC<FormProps> = ({ title, inputs, onSubmit, actions }) => {
+const Form: React.FC<FormProps> = ({
+  title,
+  inputs,
+  onSubmit,
+  actions,
+  topInputsBlock,
+}) => {
   const [formValues, setFormValues] = useState<Record<string, InputValueType>>(
     () =>
       inputs.reduce((acc, input) => {
@@ -64,11 +71,12 @@ const Form: React.FC<FormProps> = ({ title, inputs, onSubmit, actions }) => {
 
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-      <div className="p-8 rounded-md bg-white flex items-center justify-between">
-        <h1 className="text-xl">{title}</h1>
+      <div className="p-8 rounded-md bg-background flex items-center justify-between">
+        <h1 className="text-xl font-[700]">{title}</h1>
         {actions}
       </div>
-      <div className="p-8 bg-white rounded-md flex flex-col gap-5">
+      {topInputsBlock}
+      <div className="p-8 bg-background rounded-md flex flex-col gap-5">
         {inputs.map((input) => (
           <div key={input.proprety} className="flex flex-col">
             <Input

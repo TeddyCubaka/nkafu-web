@@ -20,7 +20,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-full max-w-md rounded-lg bg-white shadow-lg">
+      <div className="w-full max-w-md rounded-lg bg-background shadow-lg">
         <div className="p-4 border-b border-gray-200">
           <h2 className="text-lg font-medium text-gray-800">{title}</h2>
         </div>

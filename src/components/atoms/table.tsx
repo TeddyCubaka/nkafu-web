@@ -149,7 +149,7 @@ export function DataTable<T extends { id?: string | number }>({
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-background divide-y divide-gray-200">
             {currentData.map((item, index) => {
               return (
                 <tr
@@ -183,11 +183,7 @@ export function DataTable<T extends { id?: string | number }>({
                           <Image
                             src={
                               String(item[column.proprety as keyof typeof item])
-                                ? //  &&
-                                  // isValidURL(
-                                  //   String(item[column.key as keyof typeof item])
-                                  // )
-                                  String(
+                                ? String(
                                     item[column.proprety as keyof typeof item]
                                   )
                                 : notElement
@@ -212,7 +208,9 @@ export function DataTable<T extends { id?: string | number }>({
                   })}
                   <td className="px-4 py-3 whitespace-nowrap w-fit">
                     <Link
-                      href={`/change/${params.app}/${params.model}/${item.id}`}
+                      href={`/${
+                        ["agent"].includes(params.model) ? "list" : "change"
+                      }/${params.app}/${params.model}/${item.id}`}
                       className="text-sm font-semibold text-primary"
                     >
                       Afficher

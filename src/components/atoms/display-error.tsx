@@ -68,7 +68,7 @@ export const JsonErrorCard = ({
   };
 
   return (
-    <div className="border bg-white p-10 rounded-md flex flex-col gap-5">
+    <div className="border h-fit bg-background p-10 rounded-md flex flex-col gap-5">
       <div className="flex flex-col justify-center items-center gap-5 text-2xl">
         <div className="w-full flex gap-5">
           <Button
@@ -115,7 +115,7 @@ export const JsonErrorCard = ({
               )}
               <span className="font-medium">{message}</span>
               {code && (
-                <span className="text-sm px-2 py-1 rounded-full bg-white/50">
+                <span className="text-sm px-2 py-1 rounded-full bg-background/50">
                   Code: {code}
                 </span>
               )}

@@ -147,7 +147,7 @@ const Input = ({
     <div className="w-full flex flex-col gap-2">
       <label
         className={
-          "font-medium text-black " +
+          "font-medium text-black dark:text-white " +
           (type === "boolean" ? "flex gap-5 items-center" : "")
         }
         htmlFor={id || verbose}
@@ -179,9 +179,9 @@ const Input = ({
                 ))}
             </div>
             <div className="relative w-full">
-              <div className="max-h-80 overflow-y-auto border border-gray-300 rounded-md">
+              <div className="max-h-80 overflow-y-auto border border-bg-secondary rounded-md">
                 {dynamicOptions.length === 0 ? (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-white text-gray-500">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-background text-gray-500">
                     <span className="text-sm">
                       Aucune donnée pour l&apos;instant
                     </span>
@@ -192,8 +192,8 @@ const Input = ({
                       key={String(option.value)}
                       className={`flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-200 ${
                         value?.value?.includes(option.value)
-                          ? "bg-gray-300"
-                          : "bg-white"
+                          ? "bg-bg-secondary"
+                          : "bg-background"
                       }`}
                       onClick={() => handleMultiSelectChange(option.value)}
                     >
@@ -241,7 +241,7 @@ const Input = ({
         ) : (
           <div className="relative">
             <input
-              className="w-full rounded border border-stroke bg-gray px-3 py-2 font-light text-black focus:border-primary focus-visible:outline-none"
+              className="w-full rounded border-none border-foreground bg-gray px-3 py-2 font-light bg-bg-secondary text-foreground focus:border-background focus-visible:outline-none"
               type={
                 type === "float"
                   ? "number"

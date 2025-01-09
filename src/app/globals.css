@@ -5,15 +5,18 @@
 :root {
   --background: #ffffff;
   --foreground: #243147;
-  --primary-color: #048996;
+  /* --primary-color: #048996; */
+  --bg-secondary: #e2e8f0;
   --primary: #048996;
 }
 
 .dark {
   --background: #010418;
   --foreground: #ffffff;
+  --bg-secondary: #1e202e;
   /* --primary-color: #00d1b2; */
   --primary: #048996;
+
 }
 
 body {
