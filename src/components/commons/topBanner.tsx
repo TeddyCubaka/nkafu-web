@@ -58,7 +58,7 @@ const TopBanner = () => {
               ? `${user?.agent?.firstName} ${user?.agent?.lastName}`
               : user.name}
           </span>
-          <span>role : {user?.role.name || "---"}</span>
+          <span>role : {user?.role?.name || "---"}</span>
           {/* <span>solde : {user?.agent.wallets[0]?.solde || 0}</span> */}
         </div>
         <div

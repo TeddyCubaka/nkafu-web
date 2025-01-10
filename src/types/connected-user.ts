@@ -25,7 +25,7 @@ export interface ConnectedUser {
   role: {
     id: string;
     name: string;
-  };
+  } | null;
 }
 
 export interface Agent {
