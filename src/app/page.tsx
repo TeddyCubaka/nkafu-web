@@ -1,22 +1,22 @@
 "use client";
 
 import StatisticsBlock from "@/components/atoms/stats";
-import { connectedUserStore } from "@/components/store/connectedUser";
+// import { connectedUserStore } from "@/components/store/connectedUser";
 import { MdOpenInNew } from "react-icons/md";
 import { TbPigMoney } from "react-icons/tb";
-import { useStore } from "zustand";
+// import { useStore } from "zustand";
 
 export default function Home() {
-  const { user } = useStore(connectedUserStore);
+  // const { user } = useStore(connectedUserStore);
 
   return (
     <div className="w-full h-full max-h-screen flex flex-col p-10 gap-5">
       <div className="flex gap-5 justify-between rounded-lg">
         {Array(4)
           .fill(null)
-          .map((_, element) => {
+          .map((_, index) => {
             return (
-              <div className="flex flex-col text-foreground p-5 bg-background rounded-lg flex-1 gap-10">
+              <div key={index} className="flex flex-col text-foreground p-5 bg-background rounded-lg flex-1 gap-10">
                 <div className="flex justify-between">
                   <span className="w-12 h-12 text-foreground bg-bg-secondary flex items-center justify-center rounded-full">
                     <TbPigMoney size={25} />
