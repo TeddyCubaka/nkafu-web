@@ -1,7 +1,6 @@
 "use client";
 
 import { connectedUserStore } from "@/components/store/connectedUser";
-import { FaUserGraduate } from "react-icons/fa";
 import { useStore } from "zustand";
 
 export default function Home() {

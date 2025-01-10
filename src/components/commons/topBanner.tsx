@@ -16,7 +16,7 @@ const TopBanner = () => {
   useEffect(() => {
     if (!user || user == null) {
       setLoading(true);
-      let localStorageUser =
+      const localStorageUser =
         localStorage.getItem("dp-sk-moto-user") &&
         localStorage.getItem("dp-sk-moto-user") !== null
           ? JSON.parse(String(localStorage.getItem("dp-sk-moto-user")))
@@ -26,7 +26,7 @@ const TopBanner = () => {
         setLoading(false);
       }
     }
-  }, [user]);
+  }, [user, setter]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
