@@ -21,7 +21,7 @@ export interface ConnectedUser {
     };
   };
   userDevices: any[]; // Spécifier un type plus précis si nécessaire
-  agent: Agent;
+  agent: Agent | null;
   role: {
     id: string;
     name: string;

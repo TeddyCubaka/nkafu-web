@@ -45,7 +45,7 @@ const TopBanner = () => {
   return (
     <div className="flex justify-between items-center m-5">
       <div>
-        {user?.agent.organization.name || (
+        {(user?.agent && user?.agent.organization.name) || (
           <span className="text-red-500 text-lg border px-3 py-2 border-red-500 flex items-center rounded-lg gap-5 cursor-pointer">
             <IoIosWarning size={25} /> Aucune organisation trouvée
           </span>
