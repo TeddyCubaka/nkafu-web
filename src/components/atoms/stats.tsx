@@ -8,7 +8,6 @@ import {
   Legend,
 } from "chart.js";
 
-// Enregistrer les modules nécessaires
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export default function StatisticsChart() {
@@ -24,6 +23,12 @@ export default function StatisticsChart() {
       {
         label: "Spend",
         data: [40, 50, 35, 40, 60],
+        backgroundColor: "rgba(54, 162, 235, 0.7)",
+        borderRadius: 4,
+      },
+      {
+        label: "pemnding",
+        data: [70, 51, 15, 60, 80],
         backgroundColor: "rgba(54, 162, 235, 0.7)",
         borderRadius: 4,
       },
@@ -46,13 +51,13 @@ export default function StatisticsChart() {
       tooltip: {
         backgroundColor: "#000",
         bodyColor: "#fff",
-        titleColor: "#fff",
+        titleColor: "#black",
       },
     },
     scales: {
       x: {
         ticks: {
-        //   color: "#666",
+          color: "#666",
         },
         grid: {
           display: false,
@@ -71,8 +76,8 @@ export default function StatisticsChart() {
 
   return (
     <div className="bg-background rounded-lg p-6 shadow-md flex-1 h-full">
-      <h2 className="text-lg font-semibold text-foreground mb-4">Statistics</h2>
-      <div className=" h-full w-full p-8">
+      <h2 className="text-lg font-semibold text-foreground">Statistics</h2>
+      <div className="relative h-full w-full max-h-96">
         <Bar data={data} options={options as any} />
       </div>
     </div>
