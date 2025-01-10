@@ -213,29 +213,33 @@ const ListModelPage = () => {
               Portes-feuilles des recoltes des taxes de l&apos;agent :
             </h2>
             <div className="w-1/2 flex gap-8">
-              {data.wallets.length == 0 && (
+              {data.wallets == undefined ||
+              (Array.isArray(data.wallets) && data.wallets.length == 0) ? (
                 <div className="p-2 flex items-center justify-center rounded-md bg-bg-secondary w-[300px] h-40">
                   Aucune porte-feuille pour l&apos;instant
                 </div>
+              ) : (
+                false
               )}
-              {data.wallets.map((wallet) => {
-                return (
-                  <div
-                    className="p-2 flex items-start rounded-md bg-bg-secondary w-[300px]"
-                    key={wallet.id}
-                  >
-                    <div className="flex items-end p-5 flex-1 gap-5">
-                      <span className="text-4xl font-[900]">
-                        {wallet.solde}
+              {data.wallets &&
+                data.wallets.map((wallet) => {
+                  return (
+                    <div
+                      className="p-2 flex items-start rounded-md bg-bg-secondary w-[300px]"
+                      key={wallet.id}
+                    >
+                      <div className="flex items-end p-5 flex-1 gap-5">
+                        <span className="text-4xl font-[900]">
+                          {wallet.solde}
+                        </span>
+                        <span>{wallet.currency.formatKey}</span>
+                      </div>
+                      <span className="px-3 py-1 text-sm bg-green-200 text-green-800 rounded-full cursor-pointer hover:bg-green-300 transition-all hover:shadow-sm">
+                        liquider
                       </span>
-                      <span>{wallet.currency.formatKey}</span>
                     </div>
-                    <span className="px-3 py-1 text-sm bg-green-200 text-green-800 rounded-full cursor-pointer hover:bg-green-300 transition-all hover:shadow-sm">
-                      liquider
-                    </span>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
         </div>

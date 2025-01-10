@@ -4,12 +4,14 @@ import { connectedUserStore } from "../store/connectedUser";
 import { FaUserGraduate } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const TopBanner = () => {
   const { user, setter } = useStore(connectedUserStore);
   const [loading, setLoading] = useState<boolean>(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const path = usePathname();
 
   useEffect(() => {
     if (!user || user == null) {
@@ -26,8 +28,6 @@ const TopBanner = () => {
     }
   }, [user]);
 
-  if (loading) return <span></span>;
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -40,8 +40,10 @@ const TopBanner = () => {
     };
   }, []);
 
+  if (loading) return <span></span>;
+  if (["/auth/login"].includes(path)) return false;
   return (
-    <div className="border flex justify-between items-center m-5">
+    <div className="flex justify-between items-center m-5">
       <div>
         {user?.agent.organization.name || (
           <span className="text-red-500 text-lg border px-3 py-2 border-red-500 flex items-center rounded-lg gap-5 cursor-pointer">
@@ -57,6 +59,7 @@ const TopBanner = () => {
               : user.name}
           </span>
           <span>role : {user?.role.name || "---"}</span>
+          {/* <span>solde : {user?.agent.wallets[0]?.solde || 0}</span> */}
         </div>
         <div
           className="rounded-full bg-background text-foreground p-3 flex items-center justify-center cursor-pointer"

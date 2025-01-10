@@ -14,7 +14,7 @@ export interface Agent {
   createdByUserId: string | null;
   isDeleted: boolean;
   meta: Record<string, any>; // Pour des données supplémentaires non spécifiées
-  wallets: Wallet[];
+  wallets: Wallet[] | undefined;
   user: User;
 }
 

@@ -67,7 +67,7 @@ const Form: React.FC<FormProps> = ({
     }
   };
 
-  if (inputs.length < 1) return <div>Ce formulaire est introuvable</div>;
+  if (inputs.length < 1) return <div className="p-8 rounded-md bg-background flex items-center justify-between h-full">Ce formulaire est introuvable</div>;
 
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit}>

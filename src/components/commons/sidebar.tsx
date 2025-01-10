@@ -2,7 +2,12 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
-import { IoChevronDownOutline, IoChevronForwardOutline } from "react-icons/io5";
+import {
+  IoChevronDownOutline,
+  IoChevronForwardOutline,
+  IoMenu,
+} from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 import appLogo from "@/../public/logo/logo-inline.png";
 import Image from "next/image";
 import { iconsDictionary } from "../store/icon";
@@ -90,6 +95,7 @@ const NavSection = ({
 
 const Sidebar: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const path = usePathname();
   const [menus, setMenus] = useState<MenuDataType[]>([]);
   const [error, setError] = useState<{
@@ -153,26 +159,65 @@ const Sidebar: React.FC = () => {
 
   if (["/auth/login"].includes(path)) return false;
 
-  if (loading) return <span>loading...</span>;
+  if (loading)
+    return (
+      <div
+        className={
+          "animate-pulse bg-background text-foreground shadow-md w-64 lg:w-1/5 h-full p-5 flex flex-col gap-10 " +
+          isSidebarOpen
+            ? "translate-x-0"
+            : "-translate-x-full lg:translate-x-0"
+        }
+      >
+        <div className="flex items-center justify-between mb-5">
+          <div className="w-32 h-8 bg-gray-300 rounded-md"></div>
+          <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          {Array(5)
+            .fill(null)
+            .map((_, index) => (
+              <div
+                key={index}
+                className="h-6 bg-gray-300 rounded-md w-4/5 mx-auto"
+              ></div>
+            ))}
+        </div>
+      </div>
+    );
   if (error) return <span>{error.message}</span>;
 
   return (
-    <div className="bg-background text-foreground shadow-md w-1/5 p-5 flex flex-col gap-10">
-      <div className="container mx-auto flex items-center justify-between my-5">
-        <Image src={appLogo} alt="digipublic logo" width={120} height={70} />
-        <button
-          onClick={toggleTheme}
-          className="flex items-center gap-2 bg-primary text-background px-4 py-2 rounded-md shadow hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
-        >
-          {isDarkMode ? <>🌙</> : <>☀️</>}
-        </button>
+    <>
+      <button
+        className="lg:hidden fixed top-5 left-5 z-20 p-2 bg-primary text-background rounded-md"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        {isSidebarOpen ? <IoClose size={24} /> : <IoMenu size={24} />}
+      </button>
+
+      <div
+        className={`fixed lg:relative z-10 bg-background text-foreground shadow-md w-64 lg:w-1/5 h-full p-5 flex flex-col gap-10 transition-transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        }`}
+      >
+        <div className="container mx-auto flex items-center justify-between my-5">
+          <Image src={appLogo} alt="digipublic logo" width={120} height={70} />
+          <button
+            onClick={toggleTheme}
+            className="flex items-center gap-2 bg-primary text-background px-4 py-2 rounded-md shadow hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+          >
+            {isDarkMode ? <>🌙</> : <>☀️</>}
+          </button>
+        </div>
+        <nav className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto">
+          {menus.map((menu) => (
+            <NavSection {...menu} key={menu.name} />
+          ))}
+        </nav>
       </div>
-      <nav className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto">
-        {menus.map((menu) => (
-          <NavSection {...menu} key={menu.name} />
-        ))}
-      </nav>
-    </div>
+    </>
   );
 };
 

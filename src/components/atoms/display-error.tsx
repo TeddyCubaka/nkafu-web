@@ -69,7 +69,7 @@ export const JsonErrorCard = ({
   };
 
   return (
-    <div className="border h-fit bg-background p-10 rounded-md flex flex-col gap-5">
+    <div className="h-full w-full m-5 bg-background p-10 rounded-md flex flex-col gap-5">
       <div className="flex flex-col justify-center items-center gap-5 text-2xl">
         <div className="w-full flex gap-5">
           <Button
@@ -136,11 +136,11 @@ export const JsonErrorCard = ({
         </div>
 
         {isExpanded && (
-          <div className="p-4 space-y-4">
+          <div className="p-4 space-y-4 ">
             {errorDetails && (
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Détails :</h4>
-                <pre className="bg-black/5 p-3 h-full rounded-lg text-sm overflow-auto text-wrap">
+                <pre className="bg-black/5 p-3  rounded-lg text-sm  text-wrap">
                   {formatJson(errorDetails)}
                 </pre>
               </div>
