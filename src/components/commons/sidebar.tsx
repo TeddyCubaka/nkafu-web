@@ -14,6 +14,21 @@ import { iconsDictionary } from "../store/icon";
 import HttpClient from "@/utils/http-client";
 import Link from "next/link";
 
+const SidebarLoader = () => {
+  return (
+    <div className="w-full animate-pulse p-5 flex flex-col gap-5">
+      {Array(8)
+        .fill(null)
+        .map((_, index) => (
+          <div
+            key={index}
+            className="h-6 bg-bg-secondary rounded-md w-full mx-auto"
+          ></div>
+        ))}
+    </div>
+  );
+};
+
 type MenuDataType = {
   id: string;
   name: string;
@@ -159,33 +174,6 @@ const Sidebar: React.FC = () => {
 
   if (["/auth/login"].includes(path)) return false;
 
-  if (loading)
-    return (
-      <div
-        className={
-          "animate-pulse bg-background text-foreground shadow-md w-64 lg:w-1/5 h-full p-5 flex flex-col gap-10 " +
-          isSidebarOpen
-            ? "translate-x-0"
-            : "-translate-x-full lg:translate-x-0"
-        }
-      >
-        <div className="flex items-center justify-between mb-5">
-          <div className="w-32 h-8 bg-gray-300 rounded-md"></div>
-          <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-        </div>
-
-        <div className="flex flex-col gap-4">
-          {Array(5)
-            .fill(null)
-            .map((_, index) => (
-              <div
-                key={index}
-                className="h-6 bg-gray-300 rounded-md w-4/5 mx-auto"
-              ></div>
-            ))}
-        </div>
-      </div>
-    );
   if (error) return <span>{error.message}</span>;
 
   return (
@@ -212,9 +200,11 @@ const Sidebar: React.FC = () => {
           </button>
         </div>
         <nav className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto">
-          {menus.map((menu) => (
-            <NavSection {...menu} key={menu.name} />
-          ))}
+          {loading ? (
+            <SidebarLoader />
+          ) : (
+            menus.map((menu) => <NavSection {...menu} key={menu.name} />)
+          )}
         </nav>
       </div>
     </>

@@ -42,7 +42,7 @@ const TopBanner = () => {
 
   if (loading) return <span></span>;
   if (["/auth/login"].includes(path)) return false;
-  return (
+  return user || user !== null ? (
     <div className="flex justify-between items-center m-5">
       <div>
         {(user?.agent && user?.agent.organization.name) || (
@@ -59,7 +59,6 @@ const TopBanner = () => {
               : user.name}
           </span>
           <span>role : {user?.role?.name || "---"}</span>
-          {/* <span>solde : {user?.agent.wallets[0]?.solde || 0}</span> */}
         </div>
         <div
           className="rounded-full bg-background text-foreground p-3 flex items-center justify-center cursor-pointer"
@@ -67,8 +66,6 @@ const TopBanner = () => {
         >
           <FaUserGraduate size={30} />
         </div>
-
-        {/* Menu dropdown */}
         {menuVisible && (
           <div
             ref={menuRef}
@@ -92,6 +89,8 @@ const TopBanner = () => {
         )}
       </div>
     </div>
+  ) : (
+    false
   );
 };
 
