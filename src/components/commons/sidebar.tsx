@@ -2,17 +2,14 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
-import {
-  IoChevronDownOutline,
-  IoChevronForwardOutline,
-  IoMenu,
-} from "react-icons/io5";
-import { IoClose } from "react-icons/io5";
+import { IoChevronDownOutline, IoChevronForwardOutline } from "react-icons/io5";
 import appLogo from "@/../public/logo/logo-inline.png";
 import Image from "next/image";
 import { iconsDictionary } from "../store/icon";
 import HttpClient from "@/utils/http-client";
 import Link from "next/link";
+import { sidebarState } from "../store/sidebarState";
+import { useStore } from "zustand";
 
 const SidebarLoader = () => {
   return (
@@ -72,16 +69,14 @@ const NavSection = ({
           }
         }}
         className={`px-2.5 py-2 text-nowrap rounded-md flex gap-2 cursor-pointer ${
-          panding > 0
-            ? "hover:translate-x-1"
-            : "hover:bg-gray-100 dark:hover:bg-slate-500"
+          panding > 0 ? "hover:translate-x-1" : "hover:bg-bg-secondary"
         } ${path == pathname && "text-primary !font-bold"} transition-all`}
         style={{
           marginLeft: `${panding}px`,
         }}
       >
         <span className="flex justify-between w-full items-center gap-3">
-          <span className="flex gap-2 items-center font-extralight">
+          <span className="flex gap-2 items-center font-light">
             {Icon !== null ? <Icon size={16} /> : false} {name}
           </span>
           {actions.length > 0 ? <ChivronComponent /> : false}
@@ -110,7 +105,6 @@ const NavSection = ({
 
 const Sidebar: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const path = usePathname();
   const [menus, setMenus] = useState<MenuDataType[]>([]);
   const [error, setError] = useState<{
@@ -119,6 +113,7 @@ const Sidebar: React.FC = () => {
     [key: string]: any;
   }>();
   const [loading, setLoading] = useState(true);
+  const { isOpen, setIsOpen } = useStore(sidebarState);
 
   const toggleTheme = () => {
     const html = document.documentElement;
@@ -146,7 +141,6 @@ const Sidebar: React.FC = () => {
       setIsDarkMode(false);
     }
   }, []);
-
   useEffect(() => {
     const requester = async () => {
       try {
@@ -178,34 +172,43 @@ const Sidebar: React.FC = () => {
 
   return (
     <>
-      <button
-        className="lg:hidden fixed top-5 left-5 z-20 p-2 bg-primary text-background rounded-md"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        {isSidebarOpen ? <IoClose size={24} /> : <IoMenu size={24} />}
-      </button>
+      {isOpen && (
+        <div
+          className="lg:hidden absolute bg-[#00000086] h-screen w-screen z-10"
+          onClick={() => setIsOpen(false)}
+        ></div>
+      )}
 
       <div
-        className={`fixed lg:relative z-10 bg-background text-foreground shadow-md w-64 lg:w-1/5 h-full p-5 flex flex-col gap-10 transition-transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        className={`max-lg:fixed z-20 bg-background text-foreground shadow-md w-3/4 lg:w-1/5 h-full p-5  flex-col gap-10 transition-transform ${
+          isOpen
+            ? " translate-x-0 flex"
+            : "-translate-x-full overflow-hidden hidden"
         }`}
       >
-        <div className="container mx-auto flex items-center justify-between my-5">
-          <Image src={appLogo} alt="digipublic logo" width={120} height={70} />
-          <button
-            onClick={toggleTheme}
-            className="flex items-center gap-2 bg-primary text-background px-4 py-2 rounded-md shadow hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
-          >
-            {isDarkMode ? <>🌙</> : <>☀️</>}
-          </button>
+        <div>
+          <div className="container mx-auto flex items-center justify-between my-5">
+            <Image
+              src={appLogo}
+              alt="digipublic logo"
+              width={120}
+              height={70}
+            />
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-2 bg-primary text-background px-4 py-2 rounded-md shadow hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+            >
+              {isDarkMode ? <>🌙</> : <>☀️</>}
+            </button>
+          </div>
+          <nav className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto">
+            {loading ? (
+              <SidebarLoader />
+            ) : (
+              menus.map((menu) => <NavSection {...menu} key={menu.name} />)
+            )}
+          </nav>
         </div>
-        <nav className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto">
-          {loading ? (
-            <SidebarLoader />
-          ) : (
-            menus.map((menu) => <NavSection {...menu} key={menu.name} />)
-          )}
-        </nav>
       </div>
     </>
   );

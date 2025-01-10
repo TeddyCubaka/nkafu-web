@@ -5,9 +5,13 @@ import { FaUserGraduate } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { sidebarState } from "../store/sidebarState";
+import { IoMenu } from "react-icons/io5";
+import Button from "./button";
 
 const TopBanner = () => {
   const { user, setter } = useStore(connectedUserStore);
+  const { isOpen, setIsOpen } = useStore(sidebarState);
   const [loading, setLoading] = useState<boolean>(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -42,10 +46,15 @@ const TopBanner = () => {
 
   if (loading) return <span></span>;
   if (["/auth/login"].includes(path)) return false;
-  return user || user !== null ? (
-    <div className="flex justify-between items-center m-5">
-      <div>
-        {(user?.agent && user?.agent.organization.name) || (
+  return (
+    <div className="flex justify-between items-center py-5 lg:mx-10 mx-5 gap-10">
+      <span className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+        <IoMenu size={30} />
+      </span>
+      <div className="flex-1">
+        {user && user?.agent?.organization ? (
+          <span className="font-semibold">{user?.agent.organization.name}</span>
+        ) : (
           <span className="text-red-500 text-lg border px-3 py-2 border-red-500 flex items-center rounded-lg gap-5 cursor-pointer">
             <IoIosWarning size={25} /> Aucune organisation trouvée
           </span>
@@ -54,9 +63,9 @@ const TopBanner = () => {
       <div className="flex gap-5 items-center relative">
         <div className="flex flex-col">
           <span className="text-lg font-[700]">
-            {user?.agent !== null
+            {user && user?.agent !== null
               ? `${user?.agent?.firstName} ${user?.agent?.lastName}`
-              : user.name}
+              : user?.name}
           </span>
           <span>role : {user?.role?.name || "---"}</span>
         </div>
@@ -89,8 +98,6 @@ const TopBanner = () => {
         )}
       </div>
     </div>
-  ) : (
-    false
   );
 };
 

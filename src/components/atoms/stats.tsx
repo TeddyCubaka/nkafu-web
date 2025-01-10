@@ -75,8 +75,20 @@ export default function StatisticsChart() {
   };
 
   return (
-    <div className="bg-background rounded-lg p-6 shadow-md flex-1 h-full">
+    <div className="bg-background rounded-lg p-6 flex-1 h-fit flex flex-col gap-5">
       <h2 className="text-lg font-semibold text-foreground">Statistics</h2>
+      <div className="flex gap-5">
+        <div className="flex-1 rounded-lg flex flex-col bg-bg-secondary p-5">
+          <span className="">entrées</span>
+          <h2 className="text-4xl font-bold">23 000 fc</h2>
+          <span>par mois</span>
+        </div>
+        <div className="flex-1 rounded-lg flex flex-col bg-bg-secondary p-5">
+          <span className="">sortie</span>
+          <h2 className="text-4xl font-bold">400$</h2>
+          <span>par mois</span>
+        </div>
+      </div>
       <div className="relative h-full w-full max-h-96">
         <Bar data={data} options={options as any} />
       </div>
