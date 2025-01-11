@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { sidebarState } from "../store/sidebarState";
 import { IoMenu } from "react-icons/io5";
-import Button from "./button";
 
 const TopBanner = () => {
   const { user, setter } = useStore(connectedUserStore);
