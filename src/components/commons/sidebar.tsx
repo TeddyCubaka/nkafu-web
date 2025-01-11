@@ -61,7 +61,8 @@ const NavSection = ({
       <Link
         href={path || ""}
         onClick={() => {
-          if (actions.length > 0) setDisplayChildrens(!displayChildrens);
+          if (actions && actions.length > 0)
+            setDisplayChildrens(!displayChildrens);
           else if (path) {
             if (path == "/auth/logout") {
               localStorage.removeItem("dp-sk-moto-user");
@@ -80,22 +81,23 @@ const NavSection = ({
           <span className="flex gap-2 items-center font-light">
             {Icon !== null ? <Icon size={16} /> : false} {translate(name, true)}
           </span>
-          {actions.length > 0 ? <ChivronComponent /> : false}
+          {actions && actions.length > 0 ? <ChivronComponent /> : false}
         </span>
       </Link>
       {displayChildrens && actions.length > 0 ? (
         <>
-          {actions.map((subMenu) => {
-            return (
-              <NavSection
-                {...subMenu}
-                icon={""}
-                actions={[]}
-                key={subMenu.path}
-                panding={panding + 30}
-              />
-            );
-          })}
+          {actions &&
+            actions.map((subMenu) => {
+              return (
+                <NavSection
+                  {...subMenu}
+                  icon={""}
+                  actions={[]}
+                  key={subMenu.path}
+                  panding={panding + 30}
+                />
+              );
+            })}
         </>
       ) : (
         false
@@ -147,13 +149,28 @@ const Sidebar: React.FC = () => {
       try {
         setLoading(true);
         const httpClient = new HttpClient();
-        const data: { code: number; message: string; data: MenuDataType[] } =
+        const data: { code: number; message: string; data: any[] } =
           await httpClient.get("load/menu");
         if (!data && httpClient.error !== null) setError(httpClient.error);
         else if (!data.data && httpClient.error !== null)
           setError(httpClient.error);
         else {
-          setMenus(data.data);
+          setMenus(
+            data.data.map((menu) => ({
+              ...menu,
+              actions: menu.menuActions.map(
+                (action: {
+                  id: string;
+                  action: {
+                    id: string;
+                    name: string;
+                    path: string;
+                    method: string;
+                  };
+                }) => action.action
+              ),
+            }))
+          );
         }
       } catch (error: any) {
         setError({
@@ -203,7 +220,7 @@ const Sidebar: React.FC = () => {
             </button>
           </div>
           <nav className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto">
-            {loading ? (
+            {loading || !menus ? (
               <SidebarLoader />
             ) : (
               menus.map((menu) => <NavSection {...menu} key={menu.name} />)
