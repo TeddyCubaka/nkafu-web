@@ -80,14 +80,14 @@ const TopBanner = () => {
             className="absolute top-14 right-0 w-48 bg-white border border-gray-200 shadow-lg rounded-lg z-10"
           >
             <ul className="py-2">
-              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+              {/* <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                 Mon Profil
-              </li>
+              </li> */}
               <li
                 className="px-4 py-2 hover:bg-red-100 text-red-500 cursor-pointer"
                 onClick={() => {
-                  // Ajoutez ici la logique de déconnexion
-                  console.log("Déconnexion...");
+                  localStorage.removeItem("dp-sk-moto-user");
+                  localStorage.removeItem("dp-sk-moto-token");
                 }}
               >
                 Déconnexion

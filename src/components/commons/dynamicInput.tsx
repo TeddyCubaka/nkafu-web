@@ -227,7 +227,17 @@ const Input = ({
           </>
         ) : proprety == "icon" || type === "select" ? (
           <>
-            <Link className="text-sky-500 decoration-1 underline mb-2 block" target="_top" href={"/menu-icon"}>visualiser les icônes</Link>
+            {proprety == "icon" ? (
+              <Link
+                className="text-sky-500 decoration-1 underline mb-2 block"
+                target="_top"
+                href={"/menu-icon"}
+              >
+                visualiser les icônes
+              </Link>
+            ) : (
+              false
+            )}
             <select
               className="w-full rounded border border-stroke bg-gray px-5 py-3 text-lg bg-bg-secondary text-foreground focus:border-background focus-visible:outline-none"
               name={verbose}

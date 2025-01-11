@@ -3,7 +3,12 @@ import { JsonErrorCard } from "@/components/atoms/display-error";
 import Loader from "@/components/atoms/loader";
 import { DataTable, DataTableColumnType } from "@/components/atoms/table";
 import HttpClient from "@/utils/http-client";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { LuRefreshCcw } from "react-icons/lu";
@@ -35,6 +40,7 @@ const TableAction = ({ setRefreshData }: { setRefreshData: () => void }) => {
 
 const ListModelPage = () => {
   const path = usePathname();
+  const query = useSearchParams();
   const [error, setError] = useState<{
     code: number;
     message: string;
@@ -53,7 +59,7 @@ const ListModelPage = () => {
         setLoading(true);
         const httpClient = new HttpClient();
         const data: { code: number; message: string; data: any; meta: any } =
-          await httpClient.get(path);
+          await httpClient.get(`${path}?${query.toString()}`);
         if (!data && httpClient.error !== null) setError(httpClient.error);
         else if (!data.data && httpClient.error !== null)
           setError(httpClient.error);

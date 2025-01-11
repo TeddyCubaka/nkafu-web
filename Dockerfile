@@ -13,8 +13,8 @@ RUN yarn install
 
 COPY .env.local ./
 
-RUN yarn build
+# RUN yarn build
 
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]
