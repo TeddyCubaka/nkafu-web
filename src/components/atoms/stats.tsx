@@ -80,12 +80,12 @@ export default function StatisticsChart() {
       <div className="flex gap-5">
         <div className="flex-1 rounded-lg flex flex-col bg-bg-secondary p-5">
           <span className="">entrées</span>
-          <h2 className="text-4xl font-bold">23 000 fc</h2>
+          <h2 className="text-4xl max-md:text-xl font-bold">23 000 000 fc</h2>
           <span>par mois</span>
         </div>
         <div className="flex-1 rounded-lg flex flex-col bg-bg-secondary p-5">
           <span className="">sortie</span>
-          <h2 className="text-4xl font-bold">400$</h2>
+          <h2 className="text-4xl max-md:text-xl font-bold">12 000 500 fc</h2>
           <span>par mois</span>
         </div>
       </div>

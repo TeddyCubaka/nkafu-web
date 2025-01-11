@@ -52,9 +52,9 @@ const AgentWorkHeatmap: React.FC<{ workData: WorkData }> = ({ workData }) => {
   return (
     <div className="flex flex-col items-center space-y-4 bg-background p-4 sm:p-8 rounded-md">
       <h2 className="text-xl font-semibold">Calendrier de travail - {year}</h2>
-      <div className="flex flex-wrap gap-4">
+      <div className="lg:flex max-lg:grid max-lg:grid-cols-6 max-md:grid-cols-3 gap-4">
         {months.map((month, monthIndex) => (
-          <div key={month} className="flex flex-col items-center space-y-2">
+          <div key={month} className="flex flex-col items-center space-y-2 w-full">
             <span className="font-medium">{month}</span>
             <div className="grid grid-cols-7 gap-1">
               {generateDaysInMonth(year, monthIndex).map((day) => {
@@ -66,7 +66,7 @@ const AgentWorkHeatmap: React.FC<{ workData: WorkData }> = ({ workData }) => {
                     key={dayString}
                     title={dayString}
                     className={`h-3 w-3 rounded-sm border ${
-                      isWorked ? "bg-green-500" : "bg-gray-200"
+                      isWorked ? "bg-primary" : "bg-bg-secondary"
                     }`}
                   ></div>
                 );

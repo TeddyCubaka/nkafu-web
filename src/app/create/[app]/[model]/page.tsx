@@ -59,7 +59,7 @@ const CreateModelPage = () => {
       </div>
     );
   return (
-    <div className="p-10">
+    <div className="p-10 max-md:p-5">
       <Form
         title={`Enrigistrement dans : ${params.model}`}
         inputs={inputs}
@@ -76,16 +76,16 @@ const CreateModelPage = () => {
           });
         }}
         actions={
-          <div>
+          <div className="max-md:w-full max-md:flex max-md:gap-5">
             <Button
-              className="shadow-none rounded-none text-sm !bg-gray-200 text-gray-600"
+              className="max-md:flex-1 shadow-none rounded-none text-sm !bg-gray-200 text-gray-600"
               variant="primary"
               onClick={() => router.push(`/list/${params.app}/${params.model}`)}
             >
               Annuler
             </Button>
             <Button
-              className="shadow-none rounded-none text-sm !bg-green-200 text-green-600"
+              className="max-md:flex-1 shadow-none rounded-none text-sm !bg-green-200 text-green-600"
               variant="primary"
               type="submit"
             >

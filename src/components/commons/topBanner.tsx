@@ -27,8 +27,8 @@ const TopBanner = () => {
           : undefined;
       if (localStorageUser) {
         setter(localStorageUser);
-        setLoading(false);
       }
+      setLoading(false);
     }
   }, [user, setter]);
 

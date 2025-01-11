@@ -160,7 +160,7 @@ const ListModelPage = () => {
     );
   if (data !== null)
     return (
-      <div className="p-10 flex flex-col gap-5">
+      <div className="p-10 max-md:p-5 flex flex-col gap-5">
         <div
           className="text-lg font-[700] flex items-center cursor-pointer"
           onClick={() => router.back()}
@@ -168,7 +168,7 @@ const ListModelPage = () => {
           <IoChevronBackOutline size={20} /> retour
         </div>
         <AgentWorkHeatmap workData={workData} />
-        <div className="flex gap-8">
+        <div className="flex gap-8 max-md:flex-col">
           <div className="p-8 bg-background rounded-md flex flex-col gap-5 flex-1">
             <div className="text-lg font-[700] flex items-center">
               <h3 className="flex-1">Information sur l&apos;agent</h3>
@@ -212,10 +212,10 @@ const ListModelPage = () => {
             <h2 className="text-xl font-[700]">
               Portes-feuilles des recoltes des taxes de l&apos;agent :
             </h2>
-            <div className="w-1/2 flex gap-8">
+            <div className="w-1/2 flex gap-8 max-md:w-full">
               {data.wallets == undefined ||
               (Array.isArray(data.wallets) && data.wallets.length == 0) ? (
-                <div className="p-2 flex items-center justify-center rounded-md bg-bg-secondary w-[300px] h-40">
+                <div className="p-2 flex max-md:w-full items-center justify-center rounded-md bg-bg-secondary md:w-[300px] h-40">
                   Aucune porte-feuille pour l&apos;instant
                 </div>
               ) : (
@@ -225,10 +225,10 @@ const ListModelPage = () => {
                 data.wallets.map((wallet) => {
                   return (
                     <div
-                      className="p-2 flex items-start rounded-md bg-bg-secondary w-[300px]"
+                      className="p-2 flex items-start rounded-md bg-bg-secondary max-md:w-full h-40 w-[300px]"
                       key={wallet.id}
                     >
-                      <div className="flex items-end p-5 flex-1 gap-5">
+                      <div className="flex items-center justify-start h-full p-5 flex-1 gap-5">
                         <span className="text-4xl font-[900]">
                           {wallet.solde}
                         </span>

@@ -85,7 +85,7 @@ const LoginPage = () => {
     router.push("/");
   };
   return (
-    <main className="w-full flex gap-5 h-screen">
+    <main className="w-full flex gap-5 h-screen bg-background">
       <form
         className="p-16 lg:w-3/5 md:w-4/5 max-md:w-full h-full flex flex-col justify-center gap-5 items-center "
         onSubmit={handleSubmit}

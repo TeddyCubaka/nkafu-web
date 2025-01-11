@@ -71,8 +71,8 @@ const Form: React.FC<FormProps> = ({
 
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-      <div className="p-8 rounded-md bg-background flex items-center justify-between">
-        <h1 className="text-xl font-[700]">{title}</h1>
+      <div className="p-8 rounded-md bg-background flex items-center justify-between max-md:flex-col max-md:gap-5">
+        <h1 className="text-xl max-md:w-full text-left font-[700]">{title}</h1>
         {actions}
       </div>
       {topInputsBlock}

@@ -108,7 +108,7 @@ const ListModelPage = () => {
       </div>
     );
   return (
-    <div className="p-10 flex flex-col gap-5">
+    <div className="p-10 flex flex-col gap-5 max-md:p-5">
       <Form
         title={`Mise à jour dans ${params.model} : ref ${data.id}`}
         inputs={inputs}
@@ -137,16 +137,16 @@ const ListModelPage = () => {
           });
         }}
         actions={
-          <div>
+          <div className="max-md:w-full max-md:flex">
             <Button
-              className="shadow-none rounded-none text-sm !bg-gray-200 text-gray-600 hover:bg-gray-300"
+              className="max-md:flex-1 shadow-none rounded-none text-sm !bg-gray-200 text-gray-600 hover:bg-gray-300"
               variant="primary"
               onClick={() => router.push(`/list/${params.app}/${params.model}`)}
             >
               Annuler
             </Button>
             <Button
-              className="shadow-none rounded-none text-sm !bg-green-200 text-green-600 hover:bg-green-300"
+              className="max-md:flex-1 shadow-none rounded-none text-sm !bg-green-200 text-green-600 hover:bg-green-300"
               variant="primary"
               type="submit"
             >
@@ -155,7 +155,7 @@ const ListModelPage = () => {
             <Button
               variant="secondary"
               type="button"
-              className="shadow-none rounded-none text-sm bg-red-200 text-red-600 hover:bg-red-300"
+              className="max-md:flex-1 shadow-none rounded-none text-sm bg-red-200 text-red-600 hover:bg-red-300"
               onClick={async () => {
                 setDialogOpen(true);
               }}

@@ -6,7 +6,7 @@ type SidebarState = {
 };
 
 export const sidebarState = create<SidebarState>()((set) => ({
-  isOpen: true,
+  isOpen: false,
   setIsOpen: (isOpen) => {
     return set({ isOpen });
   },

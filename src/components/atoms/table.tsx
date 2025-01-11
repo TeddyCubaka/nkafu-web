@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { FiSearch, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import notElement from "@/../public/window.svg";
 import Link from "next/link";
@@ -45,13 +45,13 @@ function getNestedValue(obj: any, path: string): any {
   if (!obj || !path) return "_____";
   if (typeof obj === "string") return obj;
   if (typeof obj === "number") return obj;
-  if (obj == null) return '----';
+  if (obj == null) return "----";
 
   const keys = path.split(".");
   let current: any = obj;
 
   for (const key of keys) {
-    if (current[key] === undefined) {
+    if (current == null || current[key] === undefined) {
       return "----";
     }
     current = current[key];
@@ -77,26 +77,36 @@ export function DataTable<T extends { id?: string | number }>({
   const itemsPerPage = 15;
   const params: { app: string; model: string } = useParams();
 
-  useEffect(() => {
-    if (searchable && searchTerm) {
-      const validatedSearchKeys =
-        searchKeys.length > 0
-          ? searchKeys
-          : columns
-          ? columns.map((column) => column.proprety)
-          : [];
-
-      const filtered = data.filter((item) =>
-        validatedSearchKeys.some((key) => {
-          const value = getNestedValue(item, key as string);
-          return String(value).toLowerCase().includes(searchTerm.toLowerCase());
-        })
-      );
-      setFilteredData(filtered);
-    } else {
-      setFilteredData(data);
+  const validatedSearchKeys = useMemo(() => {
+    if (searchKeys.length > 0) {
+      return searchKeys;
     }
-  }, [searchTerm, data, searchable, searchKeys, columns]);
+    return columns ? columns.map((column) => column.proprety) : [];
+  }, [columns, searchKeys]);
+
+  useEffect(() => {
+    const filterData = () => {
+      if (searchable && searchTerm) {
+        const filtered = data.filter((item) =>
+          validatedSearchKeys.some((key) => {
+            const value = getNestedValue(item, key as string);
+            return String(value)
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase());
+          })
+        );
+        setFilteredData(filtered);
+      } else {
+        setFilteredData(data);
+      }
+    };
+
+    // Optionnel : Ajouter un délai pour optimiser (debounce)
+    const debounceTimeout = setTimeout(filterData, 300);
+
+    // Cleanup du timeout
+    return () => clearTimeout(debounceTimeout);
+  }, [searchTerm, data, searchable, validatedSearchKeys]);
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.checked ? filteredData : [];
@@ -118,30 +128,28 @@ export function DataTable<T extends { id?: string | number }>({
   const currentData = filteredData.slice(startIndex, endIndex);
 
   return (
-    <div className="w-full">
-      <div className="mb-6">
-        <div className="flex justify-between items-center gap-4 mb-4">
-          <div
-            className={`"w-full flex-1 flex items-center px-4 py-2 text-foreground focus:outline-none focus:ring-2 rounded-lg gap-4 ${
-              searchable ? "bg-background border-background" : ""
-            }`}
-          >
-            {searchable && (
-              <>
-                <FiSearch size={20} />
-                <input
-                  type="text"
-                  placeholder="Rechercher..."
-                  className="w-full  outline-none"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </>
-            )}
-          </div>
-          {filters}
-          {actions}
+    <div className="w-full flex flex-col gap-5">
+      <div className="flex justify-between items-center gap-4 max-md:flex-col">
+        <div
+          className={`w-full flex-1 flex items-center px-4 py-3 text-foreground focus:outline-none focus:ring-2 rounded-lg gap-4 ${
+            searchable ? "bg-background border-background" : ""
+          }`}
+        >
+          {searchable && (
+            <>
+              <FiSearch size={20} />
+              <input
+                type="text"
+                placeholder="Rechercher..."
+                className="w-full bg-background outline-none"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </>
+          )}
         </div>
+        {filters}
+        {actions}
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-background">

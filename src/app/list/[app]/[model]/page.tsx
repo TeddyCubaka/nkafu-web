@@ -12,22 +12,22 @@ const TableAction = ({ setRefreshData }: { setRefreshData: () => void }) => {
   const params: { app: string; model: string } = useParams();
   const router = useRouter();
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 max-md:w-full">
       <button
         onClick={() => {
           router.push(`/create/${params.app}/${params.model}`);
         }}
-        className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center gap-2"
+        className="max-md:flex-1 text-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center gap-2"
       >
         <FiPlus />
-        Ajouter
+        <span className="w-full">Ajouter</span>
       </button>
       <button
         onClick={setRefreshData}
-        className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center gap-2"
+        className="max-md:flex-1 text-center px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center gap-2"
       >
         <LuRefreshCcw />
-        Refraichir
+        <span className="w-full">Refraichir</span>
       </button>
     </div>
   );
@@ -89,7 +89,7 @@ const ListModelPage = () => {
       </div>
     );
   return (
-    <div className="p-10">
+    <div className="p-10 max-md:p-5">
       <DataTable
         columns={metaData?.listColumns || []}
         data={data}

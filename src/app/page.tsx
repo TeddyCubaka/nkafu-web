@@ -86,7 +86,7 @@ export default function Home() {
 
       <div className="w-full h-fit max-h-2/3 flex gap-5 max-lg:flex-col">
         <StatisticsBlock />
-        <div className="w-1/3 max-lg:w-full h-full bg-background rounded-lg flex items-center justify-center">
+        <div className="w-1/3 max-lg:w-full h-full max-md:h-20 bg-background rounded-lg flex items-center justify-center">
           autre donnée
         </div>
       </div>
