@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { IoCloseCircle } from "react-icons/io5";
 import { iconsDictionary } from "../store/icon";
+import translate from "../store/dictionary";
+import Link from "next/link";
 
 const Input = ({
   id,
@@ -173,10 +175,12 @@ const Input = ({
                     key={String(val)}
                     className="flex items-center gap-1 rounded bg-primary text-white px-3 py-1 text-sm"
                   >
-                    {
-                      dynamicOptions.find((option) => option.value === val)
-                        ?.label
-                    }
+                    {translate(
+                      String(
+                        dynamicOptions.find((option) => option.value === val)
+                          ?.label
+                      )
+                    )}
                     <button
                       type="button"
                       className="text-white hover:text-gray-200"
@@ -212,7 +216,9 @@ const Input = ({
                         readOnly
                         className="h-4 w-4 text-primary focus:ring-primary"
                       />
-                      <span className="text-sm">{option.label}</span>
+                      <span className="text-sm">
+                        {translate(String(option.label))}
+                      </span>
                     </div>
                   ))
                 )}
@@ -220,23 +226,26 @@ const Input = ({
             </div>
           </>
         ) : proprety == "icon" || type === "select" ? (
-          <select
-            className="w-full rounded border border-stroke bg-gray px-5 py-3 text-lg bg-bg-secondary text-foreground focus:border-background focus-visible:outline-none"
-            name={verbose}
-            id={id}
-            value={value?.value || ""}
-            onChange={handleChange}
-            required={!isOptional}
-          >
-            <option value="" disabled>
-              ---
-            </option>
-            {dynamicOptions.map((option) => (
-              <option key={String(option.value)} value={option.value}>
-                {option.label}
+          <>
+            <Link className="text-sky-500 decoration-1 underline mb-2 block" target="_top" href={"/menu-icon"}>visualiser les icônes</Link>
+            <select
+              className="w-full rounded border border-stroke bg-gray px-5 py-3 text-lg bg-bg-secondary text-foreground focus:border-background focus-visible:outline-none"
+              name={verbose}
+              id={id}
+              value={value?.value || ""}
+              onChange={handleChange}
+              required={!isOptional}
+            >
+              <option value="" disabled>
+                ---
               </option>
-            ))}
-          </select>
+              {dynamicOptions.map((option) => (
+                <option key={String(option.value)} value={option.value}>
+                  {translate(String(option.label))}
+                </option>
+              ))}
+            </select>
+          </>
         ) : type === "boolean" ? (
           <input
             type="checkbox"

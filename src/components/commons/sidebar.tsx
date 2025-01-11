@@ -10,6 +10,7 @@ import HttpClient from "@/utils/http-client";
 import Link from "next/link";
 import { sidebarState } from "../store/sidebarState";
 import { useStore } from "zustand";
+import translate from "../store/dictionary";
 
 const SidebarLoader = () => {
   return (
@@ -77,7 +78,7 @@ const NavSection = ({
       >
         <span className="flex justify-between w-full items-center gap-3">
           <span className="flex gap-2 items-center font-light">
-            {Icon !== null ? <Icon size={16} /> : false} {name}
+            {Icon !== null ? <Icon size={16} /> : false} {translate(name, true)}
           </span>
           {actions.length > 0 ? <ChivronComponent /> : false}
         </span>
