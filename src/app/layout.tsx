@@ -11,11 +11,6 @@ const font = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-// const inter_Tight = Inter_Tight({
-//   variable: "--font-inter-tight",
-//   subsets: ["latin"],
-// });
-
 export const metadata: Metadata = {
   title: "Digipublic",
   description: "Digipublic",

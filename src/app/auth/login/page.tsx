@@ -78,8 +78,11 @@ const LoginPage = () => {
     }
     const user: ConnectedUser = data.data;
 
-    localStorage.setItem("dp-sk-moto-user", JSON.stringify(user));
-    localStorage.setItem("dp-sk-moto-token", JSON.stringify(data.access_token));
+    await localStorage.setItem("dp-sk-moto-user", JSON.stringify(user));
+    await localStorage.setItem(
+      "dp-sk-moto-token",
+      JSON.stringify(data.access_token)
+    );
     userStore.setter(user);
     setConnecting(false);
     router.push("/");

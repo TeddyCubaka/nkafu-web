@@ -11,6 +11,7 @@ import Link from "next/link";
 import { sidebarState } from "../store/sidebarState";
 import { useStore } from "zustand";
 import translate from "../store/dictionary";
+import Button from "./button";
 
 const SidebarLoader = () => {
   return (
@@ -110,12 +111,16 @@ const Sidebar: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const path = usePathname();
   const [menus, setMenus] = useState<MenuDataType[]>([]);
-  const [error, setError] = useState<{
-    code: number;
-    message: string;
-    [key: string]: any;
-  }>();
+  const [error, setError] = useState<
+    | {
+        code: number;
+        message: string;
+        [key: string]: any;
+      }
+    | undefined
+  >(undefined);
   const [loading, setLoading] = useState(true);
+  const [fetchMenu, setFetchMenu] = useState(true);
   const { isOpen, setIsOpen } = useStore(sidebarState);
 
   const toggleTheme = () => {
@@ -144,6 +149,7 @@ const Sidebar: React.FC = () => {
       setIsDarkMode(false);
     }
   }, []);
+
   useEffect(() => {
     const requester = async () => {
       try {
@@ -155,6 +161,7 @@ const Sidebar: React.FC = () => {
         else if (!data.data && httpClient.error !== null)
           setError(httpClient.error);
         else {
+          setError(undefined);
           setMenus(
             data.data.map((menu) => ({
               ...menu,
@@ -173,20 +180,21 @@ const Sidebar: React.FC = () => {
           );
         }
       } catch (error: any) {
-        setError({
-          code: error.code || 500,
-          message: error.message || "une erreur s'est produite",
-        });
+        if (menus.length > 0)
+          setError({
+            code: error.code || 500,
+            message: error.message || "une erreur s'est produite",
+          });
       } finally {
         setLoading(false);
+        setFetchMenu(false);
       }
     };
-    requester();
-  }, []);
+
+    if (fetchMenu && !["/auth/login"].includes(path)) requester();
+  }, [fetchMenu, path]);
 
   if (["/auth/login"].includes(path)) return false;
-
-  if (error) return <span>{error.message}</span>;
 
   return (
     <>
@@ -219,9 +227,25 @@ const Sidebar: React.FC = () => {
               {isDarkMode ? <>🌙</> : <>☀️</>}
             </button>
           </div>
-          <nav className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto">
+          <nav className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto h-full">
             {loading || !menus ? (
               <SidebarLoader />
+            ) : error ? (
+              <div className="w-full flex flex-col gap-5 items-center">
+                <span>une erreur s&apos;est produite</span>
+                <span>{error.message}</span>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setLoading(true);
+                    setFetchMenu(true);
+                  }}
+                  isLoading={loading}
+                  className="p-3 !rounded-full"
+                >
+                  refresh
+                </Button>
+              </div>
             ) : (
               menus.map((menu) => <NavSection {...menu} key={menu.name} />)
             )}

@@ -4,7 +4,7 @@ import { connectedUserStore } from "../store/connectedUser";
 import { FaUserGraduate } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { sidebarState } from "../store/sidebarState";
 import { IoMenu } from "react-icons/io5";
 
@@ -15,6 +15,7 @@ const TopBanner = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const path = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     if (!user || user == null) {
@@ -80,14 +81,12 @@ const TopBanner = () => {
             className="absolute top-14 right-0 w-48 bg-white border border-gray-200 shadow-lg rounded-lg z-10"
           >
             <ul className="py-2">
-              {/* <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                Mon Profil
-              </li> */}
               <li
                 className="px-4 py-2 hover:bg-red-100 text-red-500 cursor-pointer"
                 onClick={() => {
                   localStorage.removeItem("dp-sk-moto-user");
                   localStorage.removeItem("dp-sk-moto-token");
+                  router.push("/auth/login");
                 }}
               >
                 Déconnexion
