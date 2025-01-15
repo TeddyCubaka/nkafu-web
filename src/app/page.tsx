@@ -1,10 +1,12 @@
 "use client";
 
 import StatisticsBlock from "@/components/atoms/stats";
-// import { connectedUserStore } from "@/components/store/connectedUser";
+import { connectedUserStore } from "@/components/store/connectedUser";
+import HttpClient from "@/utils/http-client";
+import { useEffect, useState } from "react";
 import { MdOpenInNew } from "react-icons/md";
 import { TbPigMoney } from "react-icons/tb";
-// import { useStore } from "zustand";
+import { useStore } from "zustand";
 
 type DescriptiveCard = {
   icon: string;
@@ -14,39 +16,158 @@ type DescriptiveCard = {
   title: string;
 };
 
-const genericData: DescriptiveCard[] = [
-  {
-    icon: "",
-    reportNumber: "2 340 500",
-    unit: "fc",
-    dataUrl: "/list/core/agent",
-    title: "caisse de l'organisation",
-  },
-  {
-    icon: "",
-    reportNumber: "30 000",
-    unit: "fc",
-    dataUrl: "/list/core/operation",
-    title: "operations réussies",
-  },
-  {
-    icon: "",
-    reportNumber: "867",
-    unit: "redevables",
-    dataUrl: "/list/core/agent",
-    title: "nombre des redevables recencés",
-  },
-  {
-    icon: "",
-    reportNumber: "2 000",
-    unit: "engins",
-    dataUrl: "/list/core/possessions",
-    title: "nombre des engins identifiés",
-  },
-];
+type AgentState = {
+  id: string;
+  name: string;
+  mail: string | null;
+  mobile: string;
+  isRoot: boolean;
+  isActive: boolean;
+  isStaff: boolean;
+  role: {
+    id: string;
+    name: string;
+  } | null;
+  agent: {
+    _count: {
+      operationInitializated: number;
+      operationClosed: number;
+      agentBusStops: number;
+      liquidations: number;
+      validatedLiquidations: number;
+    };
+    wallets: {
+      id: string;
+      solde: number;
+      canBeNegative: number;
+      currency: {
+        id: string;
+        symbol: string;
+      };
+    }[];
+    organization: {
+      _count: {
+        operations: number;
+        agents: number;
+        taxations: number;
+        liquidations: number;
+      };
+      wallet: {
+        currency: {
+          formatKey: string;
+        };
+        solde: number;
+      };
+    } | null;
+  } | null;
+};
+
+const GenericInformationStat = (props: DescriptiveCard) => {
+  return (
+    <div className="max-lg:w-1/2 flex flex-col p-5 bg-bg-secondary rounded-lg flex-1 gap-5">
+      <div className="flex justify-between">
+        <span className="w-12 h-12 text-foreground bg-background flex items-center justify-center rounded-full">
+          <TbPigMoney size={25} />
+        </span>
+        <span>
+          <MdOpenInNew size={25} />
+        </span>
+      </div>
+      <div>
+        <div className="flex gap-2 items-end">
+          <span className="text-4xl font-bold max-md:text-xl">
+            {props.reportNumber}
+          </span>
+          <span>{props.unit}</span>
+        </div>
+        <span>{props.title}</span>
+      </div>
+    </div>
+  );
+};
+
+const SimpleStatCard = ({
+  number,
+  title,
+  unit,
+  width = "w-full",
+}: {
+  number: string | number;
+  title: string;
+  unit: string;
+  width?: string;
+}) => {
+  return (
+    <div
+      className={`flex flex-col p-5 bg-bg-secondary rounded-lg flex-1 gap-5 ${width}`}
+    >
+      <div className="flex gap-2 items-end">
+        <span className="text-4xl font-bold max-md:text-xl">{number}</span>
+        <span>{unit}</span>
+      </div>
+      <span>{title}</span>
+    </div>
+  );
+};
 
 export default function Home() {
-  // const { user } = useStore(connectedUserStore);
+  const [userInfo, setUserInfo] = useState<AgentState | null>(null);
+  const [genericData, setGenericData] = useState<DescriptiveCard[]>([]);
+  const [error, setError] = useState<{
+    code: number;
+    message: string;
+    [key: string]: any;
+  }>();
+
+  useEffect(() => {
+    const requester = async () => {
+      const httpClient = new HttpClient();
+      const data: { code: number; message: string; data?: AgentState } =
+        await httpClient.get("load/stats");
+
+      if (!data && httpClient.error !== null) setError(httpClient.error);
+      else if (!data.data && httpClient.error !== null)
+        setError(httpClient.error);
+      else if (data.data) {
+        setUserInfo(data.data);
+        if (data.data.agent && data.data.agent.organization)
+          setGenericData([
+            {
+              title: "solde de l'organization",
+              reportNumber: data.data.agent?.organization?.wallet?.solde + "",
+              unit: data.data.agent?.organization?.wallet?.currency.formatKey,
+              dataUrl: "",
+              icon: "",
+            },
+            {
+              title: "nombre d'agent actifs",
+              reportNumber: data.data.agent?.organization?._count.agents + "",
+              unit: "agents",
+              dataUrl: "",
+              icon: "",
+            },
+            {
+              title: "nombre des taxations effectuées",
+              reportNumber:
+                data.data.agent?.organization?._count.taxations + "",
+              unit: "taxations",
+              dataUrl: "",
+              icon: "",
+            },
+            {
+              title: "nombre des taxations liquidations",
+              reportNumber:
+                data.data.agent?.organization?._count.liquidations + "",
+              unit: "liquidations",
+              dataUrl: "",
+              icon: "",
+            },
+          ]);
+      }
+    };
+
+    requester();
+  }, []);
 
   return (
     <div className="w-full h-full max-h-[90vh] flex flex-col p-10 max-md:p-5 gap-5 mb-10">
@@ -56,38 +177,42 @@ export default function Home() {
         </h1>
         <div className="flex gap-5 justify-between flex-wrap">
           {genericData.map((report, index) => {
-            return (
-              <div
-                key={index}
-                className="max-lg:w-1/2 flex flex-col p-5 bg-bg-secondary rounded-lg flex-1 gap-5"
-              >
-                <div className="flex justify-between">
-                  <span className="w-12 h-12 text-foreground bg-background flex items-center justify-center rounded-full">
-                    <TbPigMoney size={25} />
-                  </span>
-                  <span>
-                    <MdOpenInNew size={25} />
-                  </span>
-                </div>
-                <div>
-                  <div className="flex gap-2 items-end">
-                    <span className="text-4xl font-bold max-md:text-xl">
-                      {report.reportNumber}
-                    </span>
-                    <span>{report.unit}</span>
-                  </div>
-                  <span>{report.title}</span>
-                </div>
-              </div>
-            );
+            return <GenericInformationStat {...report} key={index} />;
           })}
         </div>
       </div>
 
       <div className="w-full h-fit max-h-2/3 flex gap-5 max-lg:flex-col">
         <StatisticsBlock />
-        <div className="w-1/3 max-lg:w-full h-full max-md:h-20 bg-background rounded-lg flex items-center justify-center">
-          autre donnée
+        <div className="w-1/3 max-lg:w-full h-fit bg-background rounded-lg flex flex-col items-center justify-center p-5 gap-5">
+          <div className="grid grid-cols-2 gap-5 w-full">
+            <SimpleStatCard
+              number={userInfo?.agent?.wallets[0]?.solde || 0}
+              title="Votre solde"
+              unit={userInfo?.agent?.wallets[0]?.currency?.symbol || "fc"}
+              width="w-full col-span-2"
+            />
+            <SimpleStatCard
+              number={userInfo?.agent?._count.operationInitializated || 0}
+              title="operations initialisées"
+              unit="operations"
+            />
+            <SimpleStatCard
+              number={userInfo?.agent?._count.operationClosed || 0}
+              title="operations clôturées"
+              unit="operations"
+            />
+            <SimpleStatCard
+              number={userInfo?.agent?._count.liquidations || 0}
+              title="liquidations effectuées"
+              unit="liquidations"
+            />
+            <SimpleStatCard
+              number={userInfo?.agent?._count.agentBusStops || 0}
+              title="nombre des parkings où vous êtes affectés"
+              unit="parkings"
+            />
+          </div>
         </div>
       </div>
     </div>
