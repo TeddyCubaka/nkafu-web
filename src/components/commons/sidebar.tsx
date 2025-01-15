@@ -151,6 +151,24 @@ const Sidebar: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // Fermer le sidebar sur mobile par défaut
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setIsOpen(false);
+      } else {
+        setIsOpen(true);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [setIsOpen]);
+
+  useEffect(() => {
     const requester = async () => {
       try {
         setLoading(true);
@@ -207,9 +225,7 @@ const Sidebar: React.FC = () => {
 
       <div
         className={`max-lg:fixed z-20 bg-background border-2 overflow-auto text-foreground shadow-md w-3/4 lg:w-1/5 h-full p-5  flex-col gap-10 transition-transform ${
-          isOpen
-            ? " translate-x-0 flex"
-            : "-translate-x-full hidden"
+          isOpen ? " translate-x-0 flex" : "-translate-x-full hidden"
         }`}
       >
         <div className="">
