@@ -218,13 +218,13 @@ const Sidebar: React.FC = () => {
     <>
       {isOpen && (
         <div
-          className="lg:hidden absolute bg-[#00000086] h-screen w-screen z-10"
+          className="lg:hidden absolute bg-[#00000086] dark:bg-[#ffffff86] h-screen w-screen z-10"
           onClick={() => setIsOpen(false)}
         ></div>
       )}
 
       <div
-        className={`max-lg:fixed z-20 bg-background border-2 overflow-auto text-foreground shadow-md w-3/4 lg:w-1/5 h-full p-5  flex-col gap-10 transition-transform ${
+        className={`max-lg:fixed z-20 bg-background overflow-auto text-foreground shadow-md w-3/4 lg:w-1/5 h-full p-5  flex-col gap-10 transition-transform ${
           isOpen ? " translate-x-0 flex" : "-translate-x-full hidden"
         }`}
       >
