@@ -236,13 +236,18 @@ export function DataTable<T extends { id?: string | number }>({
                           />
                         ) : column.proprety == "icon" ? (
                           <Icon size={20} />
-                        ) : column.proprety == "wallets" ? (
-                          <span>
-                            {item[column.proprety as keyof typeof item][0]
-                              ? item[column.proprety as keyof typeof item][0]
-                                  .solde
-                              : "---"}
-                          </span>
+                        ) : column.proprety == "createdAt" ? (
+                          new Date(
+                            item[column.proprety as keyof typeof item]
+                          ).toLocaleDateString()
+                        ) : column.proprety === "wallets.solde" ? (
+                          item["wallets" as keyof typeof item][0] ? (
+                            `${
+                              item["wallets" as keyof typeof item][0]["solde"]
+                            } fc`
+                          ) : (
+                            "---"
+                          )
                         ) : (
                           getNestedValue(
                             item[column.proprety.split(".")[0] as keyof T],
