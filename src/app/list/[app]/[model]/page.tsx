@@ -78,7 +78,7 @@ const ListModelPage = () => {
       }
     };
     if (refreshData) requester();
-  }, [path, refreshData]);
+  }, [path, refreshData, query]);
 
   if (loading) return <Loader />;
   if (error)

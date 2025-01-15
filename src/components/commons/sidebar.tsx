@@ -212,7 +212,6 @@ const Sidebar: React.FC = () => {
     };
     if (path == "/auth/login") setMenus([]);
     if (fetchMenu && path !== "/auth/login") requester();
-    console.log(path);
   }, [fetchMenu, path]);
 
   if (["/auth/login"].includes(path)) {

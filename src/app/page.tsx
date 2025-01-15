@@ -1,5 +1,6 @@
 "use client";
 
+import { JsonErrorCard } from "@/components/atoms/display-error";
 import StatisticsBlock from "@/components/atoms/stats";
 import HttpClient from "@/utils/http-client";
 import { useEffect, useState } from "react";
@@ -167,6 +168,20 @@ export default function Home() {
 
     requester();
   }, []);
+
+  if (error)
+    return (
+      <div className="flex justify-center h-full items-center">
+        <JsonErrorCard
+          {...{
+            message: error.message,
+            status: error.code < 400 ? "success" : "error",
+            code: error.code,
+            errorDetails: error,
+          }}
+        />
+      </div>
+    );
 
   return (
     <div className="w-full h-full max-h-[90vh] flex flex-col p-10 max-md:p-5 gap-5 mb-10">
