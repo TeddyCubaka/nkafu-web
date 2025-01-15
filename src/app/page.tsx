@@ -52,6 +52,7 @@ type AgentState = {
         taxations: number;
         liquidations: number;
       };
+      monthlyEntry: number;
       wallet: {
         currency: {
           formatKey: string;
@@ -64,7 +65,7 @@ type AgentState = {
 
 const GenericInformationStat = (props: DescriptiveCard) => {
   return (
-    <div className="max-lg:w-1/2 flex flex-col p-5 bg-bg-secondary rounded-lg flex-1 gap-5">
+    <div className="max-lg:w-1/2 max-md:w-full flex flex-col p-5 bg-bg-secondary rounded-lg flex-1 gap-5">
       <div className="flex justify-between">
         <span className="w-12 h-12 text-foreground bg-background flex items-center justify-center rounded-full">
           <TbPigMoney size={25} />
@@ -99,7 +100,7 @@ const SimpleStatCard = ({
 }) => {
   return (
     <div
-      className={`flex flex-col p-5 bg-bg-secondary rounded-lg flex-1 gap-5 ${width}`}
+      className={`flex flex-col p-5 bg-bg-secondary rounded-lg flex-1 h-full gap-5 ${width}`}
     >
       <div className="flex gap-2 items-end">
         <span className="text-4xl font-bold max-md:text-xl">{number}</span>
@@ -175,44 +176,51 @@ export default function Home() {
         <h1 className="text-xl font-semibold ">
           Information générale sur l&apos;organisation
         </h1>
-        <div className="flex gap-5 justify-between flex-wrap">
-          {genericData.map((report, index) => {
-            return <GenericInformationStat {...report} key={index} />;
-          })}
+        <div className="flex gap-5 justify-between flex-wrap max-md:grid max-md:grid-cols-2">
+          {genericData.length == 0 ? (
+            <div className="h-20 w-full flex items-center justify-center">
+              Vous n&apos;avez pas le droit de voir les informations sur votre
+              organisation
+            </div>
+          ) : (
+            genericData.map((report, index) => {
+              return <GenericInformationStat {...report} key={index} />;
+            })
+          )}
         </div>
       </div>
 
       <div className="w-full h-fit max-h-2/3 flex gap-5 max-lg:flex-col">
-        <StatisticsBlock />
-        <div className="w-1/3 max-lg:w-full h-fit bg-background rounded-lg flex flex-col items-center justify-center p-5 gap-5">
-          <div className="grid grid-cols-2 gap-5 w-full">
-            <SimpleStatCard
-              number={userInfo?.agent?.wallets[0]?.solde || 0}
-              title="Votre solde"
-              unit={userInfo?.agent?.wallets[0]?.currency?.symbol || "fc"}
-              width="w-full col-span-2"
-            />
-            <SimpleStatCard
-              number={userInfo?.agent?._count.operationInitializated || 0}
-              title="operations initialisées"
-              unit="operations"
-            />
-            <SimpleStatCard
-              number={userInfo?.agent?._count.operationClosed || 0}
-              title="operations clôturées"
-              unit="operations"
-            />
-            <SimpleStatCard
-              number={userInfo?.agent?._count.liquidations || 0}
-              title="liquidations effectuées"
-              unit="liquidations"
-            />
-            <SimpleStatCard
-              number={userInfo?.agent?._count.agentBusStops || 0}
-              title="nombre des parkings où vous êtes affectés"
-              unit="parkings"
-            />
-          </div>
+        <StatisticsBlock
+          monthlyEntry={userInfo?.agent?.organization?.monthlyEntry || 0}
+        />
+        <div className="w-1/3 max-lg:w-full h-fit bg-background rounded-lg flex-col items-center justify-center p-5 gap-5 grid grid-cols-2">
+          <SimpleStatCard
+            number={userInfo?.agent?.wallets[0]?.solde || 0}
+            title="Votre solde"
+            unit={userInfo?.agent?.wallets[0]?.currency?.symbol || "fc"}
+            width="w-full col-span-2"
+          />
+          <SimpleStatCard
+            number={userInfo?.agent?._count.operationInitializated || 0}
+            title="operations initialisées"
+            unit="operations"
+          />
+          <SimpleStatCard
+            number={userInfo?.agent?._count.operationClosed || 0}
+            title="operations clôturées"
+            unit="operations"
+          />
+          <SimpleStatCard
+            number={userInfo?.agent?._count.liquidations || 0}
+            title="liquidations effectuées"
+            unit="liquidations"
+          />
+          <SimpleStatCard
+            number={userInfo?.agent?._count.agentBusStops || 0}
+            title="nombre des parkings où vous êtes affectés"
+            unit="parkings"
+          />
         </div>
       </div>
     </div>

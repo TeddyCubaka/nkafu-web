@@ -151,7 +151,6 @@ const Sidebar: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Fermer le sidebar sur mobile par défaut
     const handleResize = () => {
       if (window.innerWidth < 1024) {
         setIsOpen(false);
@@ -183,36 +182,44 @@ const Sidebar: React.FC = () => {
           setMenus(
             data.data.map((menu) => ({
               ...menu,
-              actions: menu.menuActions.map(
-                (action: {
-                  id: string;
-                  action: {
-                    id: string;
-                    name: string;
-                    path: string;
-                    method: string;
-                  };
-                }) => action.action
-              ),
+              actions: menu.menuActions
+                ? menu.menuActions.map(
+                    (action: {
+                      id: string;
+                      action: {
+                        id: string;
+                        name: string;
+                        path: string;
+                        method: string;
+                      };
+                    }) => action.action
+                  )
+                : menu.actions,
             }))
           );
         }
       } catch (error: any) {
-        if (menus.length > 0)
+        if (menus.length > 0) {
+          setLoading(false);
+          setFetchMenu(false);
           setError({
             code: error.code || 500,
             message: error.message || "une erreur s'est produite",
           });
+        }
       } finally {
         setLoading(false);
         setFetchMenu(false);
       }
     };
-
+    if (["/auth/login"].includes(path)) setMenus([]);
     if (fetchMenu && !["/auth/login"].includes(path)) requester();
+    setLoading(false);
   }, [fetchMenu, path]);
 
-  if (["/auth/login"].includes(path)) return false;
+  if (["/auth/login"].includes(path)) {
+    return <div></div>;
+  }
 
   return (
     <>
@@ -244,12 +251,30 @@ const Sidebar: React.FC = () => {
             </button>
           </div>
           <nav className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto h-full">
-            {loading || !menus ? (
+            {loading ? (
               <SidebarLoader />
             ) : error ? (
               <div className="w-full flex flex-col gap-5 items-center">
                 <span>une erreur s&apos;est produite</span>
                 <span>{error.message}</span>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setLoading(true);
+                    setFetchMenu(true);
+                  }}
+                  isLoading={loading}
+                  className="p-3 !rounded-full"
+                >
+                  refresh
+                </Button>
+              </div>
+            ) : menus.length == 0 ? (
+              <div className="w-full flex flex-col gap-5 items-center my-10">
+                <span>
+                  Aucun menu trouvé verifiez que vous avez les accès nécessaires
+                  ou contactez votre chef
+                </span>
                 <Button
                   variant="outline"
                   onClick={() => {

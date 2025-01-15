@@ -10,25 +10,25 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-export default function StatisticsChart() {
+export default function StatisticsChart(props: { monthlyEntry: number }) {
   const data = {
     labels: ["May", "Jun", "Jul", "Aug", "Sep"],
     datasets: [
       {
         label: "Income",
-        data: [75, 75.2, 50, 65, 90],
+        data: [0, 0, 0, 0, 0],
         backgroundColor: "rgba(132, 255, 132, 0.7)",
         borderRadius: 4,
       },
       {
         label: "Spend",
-        data: [40, 50, 35, 40, 60],
+        data: [0, 0, 0, 0, 0],
         backgroundColor: "rgba(54, 162, 235, 0.7)",
         borderRadius: 4,
       },
       {
         label: "pemnding",
-        data: [70, 51, 15, 60, 80],
+        data: [0, 0, 0, 0, 0],
         backgroundColor: "rgba(54, 162, 235, 0.7)",
         borderRadius: 4,
       },
@@ -75,17 +75,19 @@ export default function StatisticsChart() {
   };
 
   return (
-    <div className="bg-background rounded-lg p-6 flex-1 h-fit flex flex-col gap-5">
+    <div className="bg-background rounded-lg p-6 flex-1 max-md:h-fit h-full flex flex-col gap-5">
       <h2 className="text-lg font-semibold text-foreground">Statistics</h2>
       <div className="flex gap-5">
         <div className="flex-1 rounded-lg flex flex-col bg-bg-secondary p-5">
           <span className="">entrées</span>
-          <h2 className="text-4xl max-md:text-xl font-bold">23 000 000 fc</h2>
+          <h2 className="text-4xl max-md:text-xl font-bold">
+            {props.monthlyEntry} fc
+          </h2>
           <span>par mois</span>
         </div>
         <div className="flex-1 rounded-lg flex flex-col bg-bg-secondary p-5">
-          <span className="">sortie</span>
-          <h2 className="text-4xl max-md:text-xl font-bold">12 000 500 fc</h2>
+          <span className="">sorties</span>
+          <h2 className="text-4xl max-md:text-xl font-bold">0 fc</h2>
           <span>par mois</span>
         </div>
       </div>
