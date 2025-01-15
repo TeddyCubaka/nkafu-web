@@ -75,7 +75,7 @@ export default function StatisticsChart(props: { monthlyEntry: number }) {
   };
 
   return (
-    <div className="bg-background rounded-lg p-6 flex-1 max-md:h-fit h-full flex flex-col gap-5">
+    <div className="bg-background rounded-lg p-6 flex-1 max-md:h-fit w-full h-full flex flex-col gap-5">
       <h2 className="text-lg font-semibold text-foreground">Statistics</h2>
       <div className="flex gap-5">
         <div className="flex-1 rounded-lg flex flex-col bg-bg-secondary p-5">

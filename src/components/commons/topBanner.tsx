@@ -55,7 +55,7 @@ const TopBanner = () => {
         {user && user?.agent?.organization ? (
           <span className="font-semibold">{user?.agent.organization.name}</span>
         ) : (
-          <span className="text-red-500 text-lg border px-3 py-2 border-red-500 flex items-center rounded-lg gap-5 cursor-pointer">
+          <span className="w-fit text-red-500 text-lg border px-3 py-2 border-red-500 flex items-center rounded-lg gap-5 cursor-pointer">
             <IoIosWarning size={25} /> Aucune organisation trouvée
           </span>
         )}

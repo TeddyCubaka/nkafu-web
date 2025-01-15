@@ -1,12 +1,10 @@
 "use client";
 
 import StatisticsBlock from "@/components/atoms/stats";
-import { connectedUserStore } from "@/components/store/connectedUser";
 import HttpClient from "@/utils/http-client";
 import { useEffect, useState } from "react";
-import { MdOpenInNew } from "react-icons/md";
+// import { MdOpenInNew } from "react-icons/md";
 import { TbPigMoney } from "react-icons/tb";
-import { useStore } from "zustand";
 
 type DescriptiveCard = {
   icon: string;
@@ -70,9 +68,9 @@ const GenericInformationStat = (props: DescriptiveCard) => {
         <span className="w-12 h-12 text-foreground bg-background flex items-center justify-center rounded-full">
           <TbPigMoney size={25} />
         </span>
-        <span>
+        {/* <span>
           <MdOpenInNew size={25} />
-        </span>
+        </span> */}
       </div>
       <div>
         <div className="flex gap-2 items-end">
@@ -190,37 +188,48 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="w-full h-fit max-h-2/3 flex gap-5 max-lg:flex-col">
-        <StatisticsBlock
-          monthlyEntry={userInfo?.agent?.organization?.monthlyEntry || 0}
-        />
-        <div className="w-1/3 max-lg:w-full h-fit bg-background rounded-lg flex-col items-center justify-center p-5 gap-5 grid grid-cols-2">
-          <SimpleStatCard
-            number={userInfo?.agent?.wallets[0]?.solde || 0}
-            title="Votre solde"
-            unit={userInfo?.agent?.wallets[0]?.currency?.symbol || "fc"}
-            width="w-full col-span-2"
+      <div
+        className={`w-full h-fit max-h-2/3 grid ${
+          userInfo?.agent?.organization ? "grid-cols-2" : "grid-cols-1"
+        } gap-5 max-lg:flex max-lg:flex-col`}
+      >
+        {userInfo?.agent?.organization ? (
+          <StatisticsBlock
+            monthlyEntry={userInfo?.agent?.organization?.monthlyEntry || 0}
           />
-          <SimpleStatCard
-            number={userInfo?.agent?._count.operationInitializated || 0}
-            title="operations initialisées"
-            unit="operations"
-          />
-          <SimpleStatCard
-            number={userInfo?.agent?._count.operationClosed || 0}
-            title="operations clôturées"
-            unit="operations"
-          />
-          <SimpleStatCard
-            number={userInfo?.agent?._count.liquidations || 0}
-            title="liquidations effectuées"
-            unit="liquidations"
-          />
-          <SimpleStatCard
-            number={userInfo?.agent?._count.agentBusStops || 0}
-            title="nombre des parkings où vous êtes affectés"
-            unit="parkings"
-          />
+        ) : (
+          false
+        )}
+        <div className="w-full max-lg:w-full h-fit bg-background rounded-lg flex flex-col gap-5 p-5">
+          <h1 className="text-xl font-semibold w-full">Vos informations</h1>
+          <div className="gap-5 grid grid-cols-2">
+            <SimpleStatCard
+              number={userInfo?.agent?.wallets[0]?.solde || 0}
+              title="Votre solde"
+              unit={userInfo?.agent?.wallets[0]?.currency?.symbol || "fc"}
+              width="w-full col-span-2"
+            />
+            <SimpleStatCard
+              number={userInfo?.agent?._count.operationInitializated || 0}
+              title="operations initialisées"
+              unit="operations"
+            />
+            <SimpleStatCard
+              number={userInfo?.agent?._count.operationClosed || 0}
+              title="operations clôturées"
+              unit="operations"
+            />
+            <SimpleStatCard
+              number={userInfo?.agent?._count.liquidations || 0}
+              title="liquidations effectuées"
+              unit="liquidations"
+            />
+            <SimpleStatCard
+              number={userInfo?.agent?._count.agentBusStops || 0}
+              title="nombre des parkings où vous êtes affectés"
+              unit="parkings"
+            />
+          </div>
         </div>
       </div>
     </div>

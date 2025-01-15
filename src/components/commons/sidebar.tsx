@@ -200,8 +200,6 @@ const Sidebar: React.FC = () => {
         }
       } catch (error: any) {
         if (menus.length > 0) {
-          setLoading(false);
-          setFetchMenu(false);
           setError({
             code: error.code || 500,
             message: error.message || "une erreur s'est produite",
@@ -212,9 +210,9 @@ const Sidebar: React.FC = () => {
         setFetchMenu(false);
       }
     };
-    if (["/auth/login"].includes(path)) setMenus([]);
-    if (fetchMenu && !["/auth/login"].includes(path)) requester();
-    setLoading(false);
+    if (path == "/auth/login") setMenus([]);
+    if (fetchMenu && path !== "/auth/login") requester();
+    console.log(path);
   }, [fetchMenu, path]);
 
   if (["/auth/login"].includes(path)) {

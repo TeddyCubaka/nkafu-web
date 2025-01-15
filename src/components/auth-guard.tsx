@@ -1,9 +1,12 @@
 "use client";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Sidebar from "./commons/sidebar";
+import TopBanner from "./commons/topBanner";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const path = usePathname();
   useEffect(() => {
     if (localStorage) {
       let connectedUser = localStorage.getItem("dp-sk-moto-user");
@@ -16,9 +19,16 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         router.push("/auth/login");
         return;
       }
-      //   let connectedUserToken = localStorage.getItem("dp-sk-moto-user");
     }
   });
 
-  return <>{children}</>;
+  return (
+    <>
+      {!["/auth/login"].includes(path) ? <Sidebar /> : false}
+      <div className=" w-full bg-bg-secondary overflow-y-auto h-full">
+        <TopBanner />
+        {children}
+      </div>
+    </>
+  );
 }
