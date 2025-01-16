@@ -3,7 +3,7 @@ import Button from "@/components/commons/button";
 import Input from "@/components/commons/dynamicInput";
 import { InputType, InputValueType } from "@/types/types";
 import Image from "next/image";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import image from "@/../public/logo/icon.png";
 import HttpClient from "@/utils/http-client";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,7 @@ import { connectedUserStore } from "@/components/store/connectedUser";
 
 const LoginPage = () => {
   const [connecting, setConnecting] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [loginData, setLoginData] = useState<{
     identifier: InputValueType;
     password: InputValueType;
@@ -87,35 +88,70 @@ const LoginPage = () => {
     setConnecting(false);
     router.push("/");
   };
+
+  const toggleTheme = () => {
+    const html = document.documentElement;
+    if (html.classList.contains("dark")) {
+      html.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+      setIsDarkMode(false);
+    } else {
+      html.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      setIsDarkMode(true);
+    }
+  };
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (
+      savedTheme === "dark" ||
+      (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
+      setIsDarkMode(true);
+    } else {
+      document.documentElement.classList.remove("dark");
+      setIsDarkMode(false);
+    }
+  }, []);
+
   return (
     <main className="w-full flex gap-5 h-screen bg-background">
-      <form
-        className="p-16 lg:w-3/5 md:w-4/5 max-md:w-full h-full flex flex-col justify-center gap-5 items-center "
-        onSubmit={handleSubmit}
-      >
-        <div className="w-full flex flex-col gap-5">
-          <Image src={image} alt="helo" width={100} height={100} />
-          <h1 className="text-4xl">Connection</h1>
+      <div className="p-16 w-1/2 md:w-4/5 max-md:w-full h-full">
+        <div className="w-full flex justify-end">
+          <Button onClick={toggleTheme}>
+            {isDarkMode ? <>🌙</> : <>☀️</>}
+          </Button>
         </div>
-        {error !== null ? (
-          <span
-            className={`w-full ${
-              error.code > 399 ? "text-red-500" : "text-green-500"
-            }`}
-          >
-            {error.message}
-          </span>
-        ) : (
-          false
-        )}
-        {loginForm.map((field) => {
-          return <Input {...field} key={field.proprety} />;
-        })}
-        <Button type="submit" isLoading={connecting} className="w-full">
-          button
-        </Button>
-      </form>
-      <div className="block max-md:hidden w-full h-full bg-primary"></div>
+        <form
+          className="h-full w-full lg:w-3/5 flex mx-auto flex-col justify-center gap-5 items-center "
+          onSubmit={handleSubmit}
+        >
+          <div className="w-full flex flex-col gap-5">
+            <Image src={image} alt="helo" width={100} height={100} />
+            <h1 className="text-4xl">Connection</h1>
+          </div>
+          {error !== null ? (
+            <span
+              className={`w-full ${
+                error.code > 399 ? "text-red-500" : "text-green-500"
+              }`}
+            >
+              {error.message}
+            </span>
+          ) : (
+            false
+          )}
+          {loginForm.map((field) => {
+            return <Input {...field} key={field.proprety} />;
+          })}
+          <Button type="submit" isLoading={connecting} className="w-full">
+            se connecter
+          </Button>
+        </form>
+      </div>
+      <div className="block max-md:hidden w-full h-full bg-primary "></div>
     </main>
   );
 };
