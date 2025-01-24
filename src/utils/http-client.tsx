@@ -22,7 +22,8 @@ class HttpClient {
     endpoint: string,
     method: HttpMethod,
     body?: Record<string, any> | FormData,
-    customHeaders?: HeadersInit
+    customHeaders?: HeadersInit,
+    customToken?: string
   ): Promise<T> {
     const url = `${this.baseUrl}${
       endpoint[0] == "/" ? endpoint : `/${endpoint}`
@@ -31,7 +32,11 @@ class HttpClient {
     const headers = {
       ...this.defaultHeaders,
       ...customHeaders,
-      Authorization: brutToken == null ? "" : `Bearer ${JSON.parse(brutToken)}`,
+      Authorization: customToken
+        ? `Bearer ${customToken}`
+        : brutToken == null
+        ? ""
+        : `Bearer ${JSON.parse(brutToken)}`,
     };
 
     const options: RequestInit = {
@@ -77,36 +82,59 @@ class HttpClient {
     }
   }
 
-  public get<T>(endpoint: string, customHeaders?: HeadersInit): Promise<T> {
-    return this.request<T>(endpoint, "GET", undefined, customHeaders);
+  public get<T>(
+    endpoint: string,
+    customHeaders?: HeadersInit,
+    customToken?: string
+  ): Promise<T> {
+    return this.request<T>(
+      endpoint,
+      "GET",
+      undefined,
+      customHeaders,
+      customToken
+    );
   }
 
   public post<T>(
     endpoint: string,
     body: Record<string, any> | FormData,
-    customHeaders?: HeadersInit
+    customHeaders?: HeadersInit,
+    customToken?: string
   ): Promise<T> {
-    return this.request<T>(endpoint, "POST", body, customHeaders);
+    return this.request<T>(endpoint, "POST", body, customHeaders, customToken);
   }
 
   public put<T>(
     endpoint: string,
     body: Record<string, any> | FormData,
-    customHeaders?: HeadersInit
+    customHeaders?: HeadersInit,
+    customToken?: string
   ): Promise<T> {
-    return this.request<T>(endpoint, "PUT", body, customHeaders);
+    return this.request<T>(endpoint, "PUT", body, customHeaders, customToken);
   }
 
-  public delete<T>(endpoint: string, customHeaders?: HeadersInit): Promise<T> {
-    return this.request<T>(endpoint, "DELETE", undefined, customHeaders);
+  public delete<T>(
+    endpoint: string,
+    customHeaders?: HeadersInit,
+    customToken?: string
+  ): Promise<T> {
+    return this.request<T>(
+      endpoint,
+      "DELETE",
+      undefined,
+      customHeaders,
+      customToken
+    );
   }
 
   public patch<T>(
     endpoint: string,
     body: Record<string, any> | FormData,
-    customHeaders?: HeadersInit
+    customHeaders?: HeadersInit,
+    customToken?: string
   ): Promise<T> {
-    return this.request<T>(endpoint, "PATCH", body, customHeaders);
+    return this.request<T>(endpoint, "PATCH", body, customHeaders, customToken);
   }
 }
 

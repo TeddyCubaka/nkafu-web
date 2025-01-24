@@ -1,13 +1,14 @@
 export interface ConnectedUser {
   id: string;
-  name: string;
+  name: string | null;
   mail: string | null;
-  mobile: string;
-  isRoot: boolean;
-  isActive: boolean;
+  mobile: string | null;
+  isRoot: boolean | null;
+  isActive: boolean | null;
+  isStaff: boolean | null;
   mustRenewPassword: boolean;
   allowedDeviceNumber: number;
-  roleId: string | null;
+  roleId: null | string;
   createdAt: string;
   updatedAt: string;
   updatedByUserId: string | null;
@@ -20,7 +21,7 @@ export interface ConnectedUser {
       };
     };
   };
-  userDevices: any[]; // Spécifier un type plus précis si nécessaire
+  userDevices: any[];
   agent: Agent | null;
   role: {
     id: string;
