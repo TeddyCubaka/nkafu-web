@@ -257,6 +257,10 @@ export const dictionnaire: {
     single: "supprimer un parking",
     plural: "supprimer des parkings",
   },
+  agentBusStop: {
+    single: "parking de l'agent",
+    plural: "parkings des agents",
+  },
 };
 
 export default function translate(word: string, isPlural: boolean = false) {
