@@ -11,10 +11,10 @@ import { ConnectedUser } from "@/types/connected-user";
 import { useStore } from "zustand";
 import { connectedUserStore } from "@/components/store/connectedUser";
 import { ApiResponse } from "@/types/auth-login.type";
-import { type } from "os";
+// import { type } from "os";
 
 const OtpValidation = ({
-  onValidate,
+  // onValidate,
   token,
 }: {
   onValidate: (otp: string) => void;
@@ -22,7 +22,7 @@ const OtpValidation = ({
 }) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<String | undefined>();
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const inputsRef = useRef<HTMLInputElement[]>([]);
   const userStore = useStore(connectedUserStore);
   const router = useRouter();
@@ -143,7 +143,7 @@ const MethodSelection = ({
   }[];
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<String | undefined>();
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const handleSelect = (method: string) => {
     setIsLoading(true);
@@ -209,12 +209,12 @@ const OtpMethodAndValidation = ({
     setSelectedMethod(method);
   };
 
-  const handleOtpValidate = (otp: string) => {};
+  // const handleOtpValidate = (otp: string) => {};
 
   return (
     <div className="h-full w-full lg:w-3/5 flex mx-auto flex-col justify-center gap-5 items-center">
       {selectedMethod ? (
-        <OtpValidation onValidate={handleOtpValidate} token={token} />
+        <OtpValidation onValidate={() => {}} token={token} />
       ) : (
         <MethodSelection
           token={token}
