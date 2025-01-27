@@ -11,13 +11,10 @@ import { ConnectedUser } from "@/types/connected-user";
 import { useStore } from "zustand";
 import { connectedUserStore } from "@/components/store/connectedUser";
 import { ApiResponse } from "@/types/auth-login.type";
-// import { type } from "os";
 
 const OtpValidation = ({
-  // onValidate,
   token,
 }: {
-  onValidate: (otp: string) => void;
   token: string;
 }) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -120,7 +117,7 @@ const OtpValidation = ({
             ref={(el) => {
               inputsRef.current[index] = el!;
             }}
-            className="w-12 h-12 text-center border border-gray-300 rounded"
+            className="w-12 h-12 text-foreground text-center border border-gray-300 rounded"
           />
         ))}
       </div>
@@ -214,7 +211,7 @@ const OtpMethodAndValidation = ({
   return (
     <div className="h-full w-full lg:w-3/5 flex mx-auto flex-col justify-center gap-5 items-center">
       {selectedMethod ? (
-        <OtpValidation onValidate={() => {}} token={token} />
+        <OtpValidation token={token} />
       ) : (
         <MethodSelection
           token={token}
