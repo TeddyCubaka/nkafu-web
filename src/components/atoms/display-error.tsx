@@ -68,6 +68,11 @@ export const JsonErrorCard = ({
     info: "text-blue-500",
   };
 
+  if (code == 401 && message == "Unauthorized") {
+    router.push("auth/login");
+    return <div></div>
+  }
+
   return (
     <div className="h-full w-full m-5 bg-background p-10 rounded-md flex flex-col gap-5">
       <div className="flex flex-col justify-center items-center gap-5 text-2xl">
