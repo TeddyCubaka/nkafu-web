@@ -1,7 +1,13 @@
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
-import { FiSearch, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import {
+  FiSearch,
+  FiChevronLeft,
+  FiChevronRight,
+  FiChevronDown,
+  FiChevronRight as FiChevronRightExpand,
+} from "react-icons/fi";
 import notElement from "@/../public/window.svg";
 import Link from "next/link";
 import { iconsDictionary } from "../store/icon";
@@ -28,15 +34,14 @@ export interface TableProps<T> {
 
 function isValidUrlRegex(url: string): boolean {
   const urlPattern = new RegExp(
-    "^(https?:\\/\\/)" + // Protocole (http ou https)
-      "((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,}|" + // Nom de domaine
-      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OU une adresse IP (v4)
-      "(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*" + // Port et chemin
-      "(\\?[;&a-zA-Z\\d%_.~+=-]*)?" + // Query string
-      "(\\#[-a-zA-Z\\d_]*)?$", // Fragment
+    "^(https?:\\/\\/)" +
+      "((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,}|" +
+      "((\\d{1,3}\\.){3}\\d{1,3}))" +
+      "(\\:\\d+)?(\\/[-a-zA-Z\\d%_.~+]*)*" +
+      "(\\?[;&a-zA-Z\\d%_.~+=-]*)?" +
+      "(\\#[-a-zA-Z\\d_]*)?$",
     "i"
   );
-
   return urlPattern.test(url);
 }
 
@@ -60,10 +65,35 @@ function getNestedValue(obj: any, path: string): any {
   return current;
 }
 
-export function DataTable<T extends { id?: string | number }>({
+type FlattenedItem<T> = T & {
+  level: number;
+  parentId?: string | number;
+  isVisible?: boolean;
+};
+
+function flattenData<T extends { id?: string | number; children?: T[] }>(
+  data: T[],
+  level: number = 0,
+  parentId?: string | number
+): FlattenedItem<T>[] {
+  let flattened: FlattenedItem<T>[] = [];
+
+  data.forEach((item) => {
+    flattened.push({ ...item, level, parentId, isVisible: true });
+
+    if (item.children && item.children.length > 0) {
+      const children = flattenData(item.children, level + 1, item.id);
+      flattened = flattened.concat(children);
+    }
+  });
+
+  return flattened;
+}
+
+export function DataTable<T extends { id?: string | number; children?: T[] }>({
   data,
   columns,
-  selectable = false,
+  selectable = true,
   onRowSelect,
   actions,
   filters,
@@ -72,7 +102,10 @@ export function DataTable<T extends { id?: string | number }>({
 }: TableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
-  const [filteredData, setFilteredData] = useState<any[]>(data);
+  const [filteredData, setFilteredData] = useState<FlattenedItem<T>[]>([]);
+  const [expandedRows, setExpandedRows] = useState<Set<string | number>>(
+    new Set()
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
   const params: { app: string; model: string } = useParams();
@@ -86,8 +119,9 @@ export function DataTable<T extends { id?: string | number }>({
 
   useEffect(() => {
     const filterData = () => {
+      let filtered = data;
       if (searchable && searchTerm) {
-        const filtered = data.filter((item) =>
+        filtered = data.filter((item) =>
           validatedSearchKeys.some((key) => {
             const value = getNestedValue(item, key as string);
             return String(value)
@@ -95,37 +129,37 @@ export function DataTable<T extends { id?: string | number }>({
               .includes(searchTerm.toLowerCase());
           })
         );
-        setFilteredData(filtered);
-      } else {
-        setFilteredData(data);
       }
+      setFilteredData(flattenData(filtered));
     };
 
-    // Optionnel : Ajouter un délai pour optimiser (debounce)
     const debounceTimeout = setTimeout(filterData, 300);
-
-    // Cleanup du timeout
     return () => clearTimeout(debounceTimeout);
   }, [searchTerm, data, searchable, validatedSearchKeys]);
 
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selected = e.target.checked ? filteredData : [];
-    setSelectedRows(selected);
-    onRowSelect?.(selected);
+  const toggleRowExpansion = (id: string | number) => {
+    setExpandedRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
   };
 
-  const handleSelectRow = (item: T) => {
-    const newSelectedRows = selectedRows.includes(item)
-      ? selectedRows.filter((row) => row !== item)
-      : [...selectedRows, item];
-    setSelectedRows(newSelectedRows);
-    onRowSelect?.(newSelectedRows);
+  const isRowVisible = (item: FlattenedItem<T>) => {
+    if (item.level === 0) return true;
+    if (!item.parentId) return true;
+    return expandedRows.has(item.parentId);
   };
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const visibleData = filteredData.filter(isRowVisible);
+  const totalPages = Math.ceil(visibleData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentData = filteredData.slice(startIndex, endIndex);
+  const currentData = visibleData.slice(startIndex, endIndex);
 
   return (
     <div className="w-full flex flex-col gap-5">
@@ -156,13 +190,18 @@ export function DataTable<T extends { id?: string | number }>({
         <table className="min-w-full divide-y divide-bg-secondary">
           <thead className="bg-background">
             <tr>
+              <th className="w-8"></th>
               {selectable && (
                 <th className="w-12 px-4 py-3">
                   <input
                     type="checkbox"
                     className="rounded border-bg-secondary bg-bg-secondary text-foreground"
                     checked={selectedRows.length === filteredData.length}
-                    onChange={handleSelectAll}
+                    onChange={(e) => {
+                      const selected = e.target.checked ? filteredData : [];
+                      setSelectedRows(selected);
+                      onRowSelect?.(selected);
+                    }}
                   />
                 </th>
               )}
@@ -176,27 +215,50 @@ export function DataTable<T extends { id?: string | number }>({
                   {column.verbose}
                 </th>
               ))}
-              <th
-                className={`px-4 py-3 text-left text-sm font-bold text-gray-600 dark:text-gray-400 tracking-wider w-40`}
-              >
+              <th className="px-4 py-3 text-left text-sm font-bold text-gray-600 dark:text-gray-400 tracking-wider w-40">
                 action
               </th>
             </tr>
           </thead>
           <tbody className="bg-background divide-y divide-bg-secondary">
-            {currentData.map((item, index) => {
+            {currentData.map((item: Record<string | number, any>, index) => {
+              const hasChildren = item.children && item.children.length > 0;
+              const isExpanded = hasChildren && expandedRows.has(item.id!);
+
               return (
                 <tr
-                  key={item.id || index}
+                  key={`${item.id || index}-${item.level}`}
                   className="hover:bg-bg-secondary transition-colors"
                 >
+                  <td className="pl-2">
+                    {hasChildren && (
+                      <button
+                        onClick={() => toggleRowExpansion(item.id!)}
+                        className="p-1 hover:bg-bg-secondary rounded-full"
+                      >
+                        {isExpanded ? (
+                          <FiChevronDown className="w-4 h-4" />
+                        ) : (
+                          <FiChevronRightExpand className="w-4 h-4" />
+                        )}
+                      </button>
+                    )}
+                  </td>
                   {selectable && (
                     <td className="px-4 py-3 whitespace-nowrap">
                       <input
                         type="checkbox"
                         className="rounded border-gray-300"
-                        checked={selectedRows.includes(item)}
-                        onChange={() => handleSelectRow(item)}
+                        checked={selectedRows.includes(item.id)}
+                        onChange={() => {
+                          const newSelectedRows: T[] = selectedRows.includes(
+                            item.id
+                          )
+                            ? selectedRows.filter((row) => row !== item.id)
+                            : [...selectedRows, item.id as T];
+                          setSelectedRows(newSelectedRows);
+                          onRowSelect?.(newSelectedRows);
+                        }}
                       />
                     </td>
                   )}
@@ -210,8 +272,11 @@ export function DataTable<T extends { id?: string | number }>({
                     }
                     return (
                       <td
-                        key={`${item.id || index}-${column.proprety}`}
+                        key={`${item.id || index}-${column.proprety}-${
+                          item.level
+                        }`}
                         className="px-4 py-3"
+                        style={{ paddingLeft: `${item.level * 20}px` }}
                       >
                         {["url", "photo"].includes(column.proprety) ? (
                           <Image
@@ -241,7 +306,7 @@ export function DataTable<T extends { id?: string | number }>({
                             item[column.proprety as keyof typeof item]
                           ).toLocaleDateString()
                         ) : column.proprety === "wallets.solde" ? (
-                          item["wallets" as keyof typeof item][0] ? (
+                          item["wallets" as keyof typeof item]?.[0] ? (
                             `${
                               item["wallets" as keyof typeof item][0]["solde"]
                             } fc`
@@ -250,7 +315,7 @@ export function DataTable<T extends { id?: string | number }>({
                           )
                         ) : (
                           getNestedValue(
-                            item[column.proprety.split(".")[0] as keyof T],
+                            item[column.proprety.split(".")[0]],
                             column.proprety.split(".").length > 1
                               ? column.proprety.split(".").slice(1).join(".")
                               : column.proprety
@@ -276,11 +341,11 @@ export function DataTable<T extends { id?: string | number }>({
         </table>
       </div>
 
-      {totalPages > -1 && (
+      {
         <div className="flex items-center justify-between mt-4 px-4">
           <div className="text-sm text-foreground">
             Affichage {startIndex + 1} à{" "}
-            {Math.min(endIndex, filteredData.length)} sur {filteredData.length}{" "}
+            {Math.min(endIndex, visibleData.length)} sur {visibleData.length}{" "}
             entrées
           </div>
           <div className="flex items-center gap-2">
@@ -303,7 +368,9 @@ export function DataTable<T extends { id?: string | number }>({
             </button>
           </div>
         </div>
-      )}
+      }
     </div>
   );
 }
+
+export default DataTable;

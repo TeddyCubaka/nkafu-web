@@ -16,7 +16,7 @@ const Input = ({
   placeholder,
   options,
   endpoint,
-  // childrens,
+  // children,
   isOptional,
   value,
   setValue,
@@ -163,7 +163,8 @@ const Input = ({
         }
         htmlFor={id || verbose}
       >
-        {verbose}
+        {verbose}{" "}
+        {!isOptional && <span className="text-sm text-red-500">*</span>}
       </label>
       <div className="relative w-full">
         {type === "multi-select" ? (
@@ -214,6 +215,7 @@ const Input = ({
                         type="checkbox"
                         checked={value?.value?.includes(option.value)}
                         readOnly
+                        required={!isOptional}
                         className="h-4 w-4 text-primary focus:ring-primary"
                       />
                       <span className="text-sm">

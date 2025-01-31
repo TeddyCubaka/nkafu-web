@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiCircleAlert, CiCircleCheck, CiCircleRemove } from "react-icons/ci";
 import { FiChevronDown, FiChevronRight, FiClock } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
@@ -68,10 +68,11 @@ export const JsonErrorCard = ({
     info: "text-blue-500",
   };
 
-  if (code == 401 && message == "Unauthorized") {
-    router.push("auth/login");
-    return <div></div>
-  }
+  useEffect(() => {
+    if (code == 401 && message == "Unauthorized") {
+      router.push("/auth/login");
+    }
+  }, [code, message, router]);
 
   return (
     <div className="h-full w-full m-5 bg-background p-10 rounded-md flex flex-col gap-5">

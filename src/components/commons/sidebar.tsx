@@ -46,9 +46,9 @@ const NavSection = ({
   actions,
   panding = 0,
 }: SideBarContent) => {
-  const [displayChildrens, setDisplayChildrens] = useState<boolean>(false);
+  const [displaychildren, setDisplaychildren] = useState<boolean>(false);
   const ChivronComponent = () => {
-    return displayChildrens ? (
+    return displaychildren ? (
       <IoChevronDownOutline />
     ) : (
       <IoChevronForwardOutline />
@@ -63,7 +63,7 @@ const NavSection = ({
         href={path || ""}
         onClick={() => {
           if (actions && actions.length > 0)
-            setDisplayChildrens(!displayChildrens);
+            setDisplaychildren(!displaychildren);
           else if (path) {
             if (path == "/auth/logout") {
               localStorage.removeItem("dp-sk-moto-user");
@@ -85,7 +85,7 @@ const NavSection = ({
           {actions && actions.length > 0 ? <ChivronComponent /> : false}
         </span>
       </Link>
-      {displayChildrens && actions.length > 0 ? (
+      {displaychildren && actions.length > 0 ? (
         <>
           {actions &&
             actions.map((subMenu) => {

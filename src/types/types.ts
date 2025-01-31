@@ -15,15 +15,20 @@ export type ApiInputType = {
     | "float"
     | "boolean"
     | "password"
-    | "childrens";
+    | "children";
   placeholder?: string;
   options?: Array<InputOption>;
   endpoint?: string;
-  childrens?: ApiInputType[];
+  children?: ApiInputType[];
   isOptional?: boolean;
+  multiple?: boolean;
 };
 
-export type InputValueType = { errorMessage: string; value: any };
+export type InputValueType = {
+  errorMessage: string;
+  value: any;
+  children?: Record<string, InputValueType>;
+};
 export interface InputType extends ApiInputType {
   id?: string;
   value: InputValueType;

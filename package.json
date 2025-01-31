@@ -17,6 +17,7 @@
     "react-icons": "^5.4.0",
     "survey-core": "^1.12.17",
     "survey-react-ui": "^1.12.17",
+    "uuid": "^11.0.5",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
