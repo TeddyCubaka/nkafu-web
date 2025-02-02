@@ -1,0 +1,57 @@
+// src/components/Form/types.ts
+export interface FormData {
+  id: string;
+  values: Record<string, InputValueType | FormData[]>;
+}
+
+export interface FormProps {
+  title: string;
+  inputs: InputType[];
+  onSubmit: (data: Record<string, any>) => void;
+  actions: React.ReactNode;
+  topInputsBlock?: React.ReactNode;
+}
+
+export type InputOption = {
+  value: string | number | readonly string[] | undefined;
+  label: string | number | boolean;
+};
+
+export type ApiInputType = {
+  verbose: string;
+  proprety: string;
+  type:
+    | "text"
+    | "number"
+    | "select"
+    | "multi-select"
+    | "date"
+    | "file"
+    | "float"
+    | "boolean"
+    | "password"
+    | "children";
+  placeholder?: string;
+  options?: Array<InputOption>;
+  endpoint?: string;
+  children?: ApiInputType[];
+  isOptional?: boolean;
+  multiple?: boolean;
+};
+
+export type InputValueType = {
+  errorMessage: string;
+  value: any;
+  children?: Record<string, InputValueType>;
+};
+export interface InputType extends ApiInputType {
+  id?: string;
+  value: InputValueType;
+  setValue: (value: InputValueType) => void;
+}
+
+export type ApiResponse = {
+  code: number;
+  message: string;
+  data: any;
+};
