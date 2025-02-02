@@ -241,7 +241,7 @@ const Input = ({
               false
             )}
             <select
-              className="w-full rounded border border-stroke bg-gray px-5 py-3 text-lg bg-bg-secondary text-foreground focus:border-background focus-visible:outline-none"
+              className="w-full rounded border border-stroke bg-gray px-5 py-3 bg-bg-secondary text-foreground focus:border-background focus-visible:outline-none"
               name={verbose}
               id={id}
               value={value?.value || ""}
@@ -271,7 +271,7 @@ const Input = ({
         ) : (
           <div className="relative">
             <input
-              className="w-full rounded border-none border-foreground bg-gray px-3 py-2 font-light bg-bg-secondary text-foreground focus:border-background focus-visible:outline-none"
+              className="w-full rounded border-none border-foreground bg-gray px-3 py-2 font-light bg-bg-secondary text-lg text-foreground focus:border-background focus-visible:outline-none"
               type={
                 type === "float"
                   ? "number"
