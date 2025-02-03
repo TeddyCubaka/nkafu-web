@@ -14,7 +14,7 @@ import { iconsDictionary } from "../store/icon";
 import { IoEllipsisHorizontalSharp } from "react-icons/io5";
 
 export interface DataTableColumnType<T> {
-  proprety: string;
+  property: string;
   verbose: string;
   render?: (value: any, item: T) => React.ReactNode;
   width?: string;
@@ -114,7 +114,7 @@ export function DataTable<T extends { id?: string | number; children?: T[] }>({
     if (searchKeys.length > 0) {
       return searchKeys;
     }
-    return columns ? columns.map((column) => column.proprety) : [];
+    return columns ? columns.map((column) => column.property) : [];
   }, [columns, searchKeys]);
 
   useEffect(() => {
@@ -207,9 +207,9 @@ export function DataTable<T extends { id?: string | number; children?: T[] }>({
               )}
               {columns.map((column) => (
                 <th
-                  key={column.proprety}
+                  key={column.property}
                   className={`px-5 py-3 text-left text-sm font-bold text-gray-600 dark:text-gray-400 tracking-wider ${
-                    column.proprety == "id" ? "w-40" : column.width || ""
+                    column.property == "id" ? "w-40" : column.width || ""
                   }`}
                 >
                   {column.verbose}
@@ -265,32 +265,32 @@ export function DataTable<T extends { id?: string | number; children?: T[] }>({
                   {columns.map((column) => {
                     let Icon = IoEllipsisHorizontalSharp;
                     if (
-                      column.proprety == "icon" &&
-                      item[column.proprety] in iconsDictionary
+                      column.property == "icon" &&
+                      item[column.property] in iconsDictionary
                     ) {
                       Icon = iconsDictionary[item["icon"]].component;
                     }
                     return (
                       <td
-                        key={`${item.id || index}-${column.proprety}-${
+                        key={`${item.id || index}-${column.property}-${
                           item.level
                         }`}
                         className="px-4 py-3"
                         style={{ paddingLeft: `${item.level * 20}px` }}
                       >
-                        {["url", "photo"].includes(column.proprety) ? (
+                        {["url", "photo"].includes(column.property) ? (
                           <Image
                             src={
                               String(
-                                item[column.proprety as keyof typeof item]
+                                item[column.property as keyof typeof item]
                               ) &&
                               isValidUrlRegex(
                                 String(
-                                  item[column.proprety as keyof typeof item]
+                                  item[column.property as keyof typeof item]
                                 )
                               )
                                 ? String(
-                                    item[column.proprety as keyof typeof item]
+                                    item[column.property as keyof typeof item]
                                   )
                                 : notElement
                             }
@@ -299,13 +299,13 @@ export function DataTable<T extends { id?: string | number; children?: T[] }>({
                             alt="url image"
                             className="border-2 border-green-500 rounded-md h-16 w-16"
                           />
-                        ) : column.proprety == "icon" ? (
+                        ) : column.property == "icon" ? (
                           <Icon size={20} />
-                        ) : column.proprety == "createdAt" ? (
+                        ) : column.property == "createdAt" ? (
                           new Date(
-                            item[column.proprety as keyof typeof item]
+                            item[column.property as keyof typeof item]
                           ).toLocaleDateString()
-                        ) : column.proprety === "wallets.solde" ? (
+                        ) : column.property === "wallets.solde" ? (
                           item["wallets" as keyof typeof item]?.[0] ? (
                             `${
                               item["wallets" as keyof typeof item][0]["solde"]
@@ -315,10 +315,10 @@ export function DataTable<T extends { id?: string | number; children?: T[] }>({
                           )
                         ) : (
                           getNestedValue(
-                            item[column.proprety.split(".")[0]],
-                            column.proprety.split(".").length > 1
-                              ? column.proprety.split(".").slice(1).join(".")
-                              : column.proprety
+                            item[column.property.split(".")[0]],
+                            column.property.split(".").length > 1
+                              ? column.property.split(".").slice(1).join(".")
+                              : column.property
                           )
                         )}
                       </td>

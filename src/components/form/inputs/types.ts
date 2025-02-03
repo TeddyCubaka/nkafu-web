@@ -1,17 +1,3 @@
-// src/components/Form/types.ts
-export interface FormData {
-  id: string;
-  values: Record<string, InputValueType | FormData[]>;
-}
-
-export interface FormProps {
-  title: string;
-  inputs: InputType[];
-  onSubmit: (data: Record<string, any>) => void;
-  actions: React.ReactNode;
-  topInputsBlock?: React.ReactNode;
-}
-
 export type InputOption = {
   value: string | number | readonly string[] | undefined;
   label: string | number | boolean;

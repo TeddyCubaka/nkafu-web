@@ -248,7 +248,7 @@ const LoginPage = () => {
 
   const loginForm: InputType[] = [
     {
-      proprety: "identifier",
+      property: "identifier",
       verbose: "identifiant",
       type: "text",
       placeholder: "numero de telephone ou adresse mail",
@@ -257,7 +257,7 @@ const LoginPage = () => {
       value: loginData.identifier,
     },
     {
-      proprety: "password",
+      property: "password",
       verbose: "mot de passe",
       type: "password",
       placeholder: "mot de passe",
@@ -357,7 +357,7 @@ const LoginPage = () => {
               </span>
             )}
             {loginForm.map((field) => (
-              <Input {...field} key={field.proprety} />
+              <Input {...field} key={field.property} />
             ))}
             <Button type="submit" isLoading={connecting} className="w-full">
               se connecter

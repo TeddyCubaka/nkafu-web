@@ -40,7 +40,7 @@ const ListModelPage = () => {
           ...input,
           value: {
             errorMessage: "",
-            value: data[input.proprety],
+            value: data[input.property],
           },
         })
       );

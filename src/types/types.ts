@@ -4,7 +4,7 @@ export type InputOption = {
 };
 export type ApiInputType = {
   verbose: string;
-  proprety: string;
+  property: string;
   type:
     | "text"
     | "number"

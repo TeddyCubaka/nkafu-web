@@ -13,7 +13,7 @@ export const useForm = (inputs: InputType[]) => {
   ): Record<string, InputValueType | FormData[]> {
     return inputs.reduce((acc, input) => {
       if (input.type === "children") {
-        acc[input.proprety] = [];
+        acc[input.property] = [];
       } else {
         let defaultValue: any;
         if ("value" in input && input.value?.value !== undefined) {
@@ -23,7 +23,7 @@ export const useForm = (inputs: InputType[]) => {
           defaultValue = 0;
         else defaultValue = input.type === "multi-select" ? [] : "";
 
-        acc[input.proprety] = { errorMessage: "", value: defaultValue };
+        acc[input.property] = { errorMessage: "", value: defaultValue };
       }
       return acc;
     }, {} as Record<string, InputValueType | FormData[]>);
@@ -172,7 +172,7 @@ export const useForm = (inputs: InputType[]) => {
 
     inputDefs.forEach((input) => {
       if (!input.isOptional && input.type !== "children") {
-        const value = (form.values[input.proprety] as InputValueType)?.value;
+        const value = (form.values[input.property] as InputValueType)?.value;
         if (value === undefined || value === "" || value === null) {
           errors.push(`${input.verbose} est requis`);
         }
