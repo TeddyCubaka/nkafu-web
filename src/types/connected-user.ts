@@ -9,6 +9,7 @@ export interface ConnectedUser {
   mustRenewPassword: boolean;
   allowedDeviceNumber: number;
   roleId: null | string;
+  organizationId?: string;
   createdAt: string;
   updatedAt: string;
   updatedByUserId: string | null;
@@ -26,6 +27,10 @@ export interface ConnectedUser {
     id: string;
     name: string;
   } | null;
+  organization?: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface Organization {

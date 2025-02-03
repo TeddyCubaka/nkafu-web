@@ -52,8 +52,8 @@ const TopBanner = () => {
         <IoMenu size={30} />
       </span>
       <div className="flex-1">
-        {user && user?.agent?.organization ? (
-          <span className="font-semibold">{user?.agent.organization.name}</span>
+        {user && user?.organization ? (
+          <span className="font-semibold">{user?.organization.name}</span>
         ) : (
           <span className="w-fit text-red-500 text-lg border px-3 py-2 border-red-500 flex items-center rounded-lg gap-5 cursor-pointer">
             <IoIosWarning size={25} /> Aucune organisation trouvée
@@ -62,11 +62,7 @@ const TopBanner = () => {
       </div>
       <div className="flex gap-5 items-center relative">
         <div className="flex flex-col">
-          <span className="text-lg font-[700]">
-            {user && user?.agent !== null
-              ? `${user?.agent?.firstName} ${user?.agent?.lastName}`
-              : user?.name}
-          </span>
+          <span className="text-lg font-[700]">{`Hello ${user?.name}`}</span>
           <span>role : {user?.role?.name || "---"}</span>
         </div>
         <div
