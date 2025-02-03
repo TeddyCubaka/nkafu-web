@@ -113,15 +113,18 @@ const ListModelPage = () => {
         title={`Mise à jour dans ${params.model} : ref ${data.id}`}
         inputs={inputs}
         onSubmit={async (formData) => {
-          const cleanedData: { [key: string]: any } = {};
-          for (const field in formData) {
-            if (
-              typeof formData[field] == "string" &&
-              formData[field].length == 0
-            )
-              cleanedData[field] == "null";
-            else cleanedData[field] = formData[field];
-          }
+          let cleanedData: { [key: string]: any } = {};
+          if (formData instanceof FormData == false) {
+            for (const field in formData) {
+              if (
+                typeof formData[field] == "string" &&
+                formData[field].length == 0
+              )
+                cleanedData[field] == "null";
+              else cleanedData[field] = formData[field];
+            }
+          } else cleanedData = formData;
+
           const httpClient = new HttpClient();
           const response: any | false = await httpClient.patch(
             path,

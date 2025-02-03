@@ -7,7 +7,7 @@ const InputFile: React.FC<InputType> = ({
   value,
   setValue,
   isOptional,
-  property
+  property,
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -15,7 +15,7 @@ const InputFile: React.FC<InputType> = ({
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setValue?.({ ...value, value: file });
-      
+
       // For image preview
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -34,14 +34,22 @@ const InputFile: React.FC<InputType> = ({
         accept="image/*" // Restricts to image files only
         className="w-full rounded border-none border-foreground bg-gray px-3 py-2 font-light bg-bg-secondary text-lg text-foreground focus:border-background focus-visible:outline-none"
         onChange={handleChange}
-        required={!isOptional}
+        required={!value.value && !isOptional}
       />
-      {preview && (
-        <img 
-          src={preview} 
-          alt="Preview" 
+      {preview ? (
+        <img
+          src={preview}
+          alt="Preview"
           className="mt-2 max-h-64 object-cover rounded"
         />
+      ) : value.value ? (
+        <img
+          src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${value.value}`}
+          alt="Preview"
+          className="mt-2 max-h-64 object-cover rounded"
+        />
+      ) : (
+        false
       )}
     </div>
   );

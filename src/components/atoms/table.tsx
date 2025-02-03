@@ -12,6 +12,7 @@ import notElement from "@/../public/window.svg";
 import Link from "next/link";
 import { iconsDictionary } from "../store/icon";
 import { IoEllipsisHorizontalSharp } from "react-icons/io5";
+import ImageWithFallback from "./table-image";
 
 export interface DataTableColumnType<T> {
   property: string;
@@ -279,7 +280,7 @@ export function DataTable<T extends { id?: string | number; children?: T[] }>({
                         style={{ paddingLeft: `${item.level * 20}px` }}
                       >
                         {["url", "photo"].includes(column.property) ? (
-                          <Image
+                          <ImageWithFallback
                             src={
                               String(
                                 item[column.property as keyof typeof item]
@@ -292,7 +293,11 @@ export function DataTable<T extends { id?: string | number; children?: T[] }>({
                                 ? String(
                                     item[column.property as keyof typeof item]
                                   )
-                                : notElement
+                                : `${process.env.NEXT_PUBLIC_API_BASE_URL}/${
+                                    item[column.property as keyof typeof item]
+                                  }`
+
+                              // notElement
                             }
                             width={100}
                             height={100}
