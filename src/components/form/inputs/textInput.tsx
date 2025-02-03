@@ -3,13 +3,12 @@ import React, { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { InputType } from "./types";
 
-interface TextInputProps extends InputType {
-  // type: "text" | "number" | "float" | "password";
-}
+// interface TextInputProps extends InputType {
+//   // type: "text" | "number" | "float" | "password";
+// }
 
-const TextInput: React.FC<TextInputProps> = ({
+const TextInput: React.FC<InputType> = ({
   id,
-  verbose,
   type,
   placeholder,
   value,

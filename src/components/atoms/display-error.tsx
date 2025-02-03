@@ -36,8 +36,7 @@ export const JsonErrorCard = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const router = useRouter();
 
-  if (!show) return null;
-
+  
   const formatJson = (data: any) => {
     try {
       return JSON.stringify(data, null, 2);
@@ -53,7 +52,7 @@ export const JsonErrorCard = ({
     warning: "border-yellow-200 bg-yellow-50",
     info: "border-blue-200 bg-blue-50",
   };
-
+  
   const headerStyles = {
     error: "bg-red-100",
     success: "bg-green-100",
@@ -69,10 +68,15 @@ export const JsonErrorCard = ({
   };
 
   useEffect(() => {
-    if (code == 401 && message == "Unauthorized") {
-      router.push("/auth/login");
+    if (code != null && message != null) {
+      if (code === 401 && message === "Unauthorized") {
+        router.push("/auth/login");
+      }
     }
   }, [code, message, router]);
+  
+  
+  if (!show) return null;
 
   return (
     <div className="h-full w-full m-5 bg-background p-10 rounded-md flex flex-col gap-5">

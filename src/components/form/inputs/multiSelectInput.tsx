@@ -8,13 +8,10 @@ interface MultiSelectInputProps extends InputType {
 }
 
 const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
-  id,
-  verbose,
   value,
   setValue,
   options,
   isOptional,
-  property
 }) => {
   const handleMultiSelectChange = (selectedValue: string | number | readonly string[] | undefined) => {
     const currentValues = Array.isArray(value?.value) ? value.value : [];

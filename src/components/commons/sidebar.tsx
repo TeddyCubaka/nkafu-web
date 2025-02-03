@@ -212,7 +212,7 @@ const Sidebar: React.FC = () => {
     };
     if (path == "/auth/login") setMenus([]);
     if (fetchMenu && path !== "/auth/login") requester();
-  }, [fetchMenu, path]);
+  }, [fetchMenu, path, menus.length]);
 
   if (["/auth/login"].includes(path)) {
     return <div></div>;
