@@ -1,16 +1,21 @@
 // src/components/Form/useForm.ts
 import { useState } from "react";
-import { FormData, InputType, InputValueType, ApiInputType } from "./types";
+import {
+  FormData as FormDataType,
+  InputType,
+  InputValueType,
+  ApiInputType,
+} from "./types";
 
 export const useForm = (inputs: InputType[]) => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FormDataType>({
     id: "root",
     values: initializeFormValues(inputs),
   });
 
   function initializeFormValues(
     inputs: ApiInputType[] | InputType[]
-  ): Record<string, InputValueType | FormData[]> {
+  ): Record<string, InputValueType | FormDataType[]> {
     return inputs.reduce((acc, input) => {
       if (input.type === "children") {
         acc[input.property] = [];
@@ -26,7 +31,7 @@ export const useForm = (inputs: InputType[]) => {
         acc[input.property] = { errorMessage: "", value: defaultValue };
       }
       return acc;
-    }, {} as Record<string, InputValueType | FormData[]>);
+    }, {} as Record<string, InputValueType | FormDataType[]>);
   }
 
   const addChildForm = (
@@ -34,20 +39,20 @@ export const useForm = (inputs: InputType[]) => {
     childInputs?: InputType[] | ApiInputType[],
     childProperty: string = "children"
   ) => {
-    const newChild: FormData = {
+    const newChild: FormDataType = {
       id: `${parentId}-${Date.now()}`,
       values: initializeFormValues(childInputs || inputs),
     };
 
     setFormData((prev) => {
-      const addChildToForm = (form: FormData): FormData => {
+      const addChildToForm = (form: FormDataType): FormDataType => {
         if (form.id === parentId) {
           return {
             ...form,
             values: {
               ...form.values,
               [childProperty]: [
-                ...(form.values[childProperty] as FormData[]),
+                ...(form.values[childProperty] as FormDataType[]),
                 newChild,
               ],
             },
@@ -57,7 +62,7 @@ export const useForm = (inputs: InputType[]) => {
         const updatedValues: Record<string, any> = {};
         for (const key in form.values) {
           if (Array.isArray(form.values[key])) {
-            updatedValues[key] = (form.values[key] as FormData[]).map(
+            updatedValues[key] = (form.values[key] as FormDataType[]).map(
               addChildToForm
             );
           } else {
@@ -81,14 +86,14 @@ export const useForm = (inputs: InputType[]) => {
     childProperty: string = "children"
   ) => {
     setFormData((prev) => {
-      const removeChild = (form: FormData): FormData => {
+      const removeChild = (form: FormDataType): FormDataType => {
         if (form.id === parentId) {
           return {
             ...form,
             values: {
               ...form.values,
               [childProperty]: (
-                form.values[childProperty] as FormData[]
+                form.values[childProperty] as FormDataType[]
               ).filter((child) => child.id !== childId),
             },
           };
@@ -97,7 +102,7 @@ export const useForm = (inputs: InputType[]) => {
         const updatedValues: Record<string, any> = {};
         for (const key in form.values) {
           if (Array.isArray(form.values[key])) {
-            updatedValues[key] = (form.values[key] as FormData[]).map(
+            updatedValues[key] = (form.values[key] as FormDataType[]).map(
               removeChild
             );
           } else {
@@ -121,7 +126,7 @@ export const useForm = (inputs: InputType[]) => {
     value: InputValueType
   ) => {
     setFormData((prev) => {
-      const updateFormValues = (form: FormData): FormData => {
+      const updateFormValues = (form: FormDataType): FormDataType => {
         if (form.id === formId) {
           return {
             ...form,
@@ -135,7 +140,7 @@ export const useForm = (inputs: InputType[]) => {
         const updatedValues: Record<string, any> = {};
         for (const key in form.values) {
           if (Array.isArray(form.values[key])) {
-            updatedValues[key] = (form.values[key] as FormData[]).map(
+            updatedValues[key] = (form.values[key] as FormDataType[]).map(
               updateFormValues
             );
           } else {
@@ -153,21 +158,35 @@ export const useForm = (inputs: InputType[]) => {
     });
   };
 
-  const collectFormData = (form: FormData): Record<string, any> => {
-    const result: Record<string, any> = {};
+  function collectFormData(data: any): FormData | Record<string, any> {
+    const myData = new FormData();
+    const jsonData: { [key: string]: any } = {};
 
-    Object.entries(form.values).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        result[key] = value.map(collectFormData);
-      } else {
-        result[key] = (value as InputValueType).value;
+    // Loop through all keys in data
+    for (const key in data.values) {
+      if (data.values.hasOwnProperty(key)) {
+        if (data.values[key].value instanceof File) {
+          const file = data.values[key].value;
+          myData.append("file", file, `${key}_${file.name}`);
+        } else {
+          jsonData[key] = data.values[key].value;
+        }
       }
-    });
+    }
 
-    return result;
-  };
+    myData.append("json", JSON.stringify(jsonData));
 
-  const validateForm = (form: FormData, inputDefs: InputType[]): string[] => {
+    if (Array.from(myData.keys()).includes("file")) {
+      return myData;
+    } else {
+      return jsonData;
+    }
+  }
+
+  const validateForm = (
+    form: FormDataType,
+    inputDefs: InputType[]
+  ): string[] => {
     const errors: string[] = [];
 
     inputDefs.forEach((input) => {

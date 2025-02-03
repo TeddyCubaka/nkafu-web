@@ -13,7 +13,6 @@ class HttpClient {
     this.baseUrl =
       process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
     this.defaultHeaders = {
-      "Content-Type": "application/json",
       ...defaultHeaders,
     };
   }
@@ -29,7 +28,7 @@ class HttpClient {
       endpoint[0] == "/" ? endpoint : `/${endpoint}`
     }`;
     const brutToken = localStorage.getItem("dp-sk-moto-token");
-    const headers = {
+    let headers: any = {
       ...this.defaultHeaders,
       ...customHeaders,
       Authorization: customToken
@@ -39,17 +38,21 @@ class HttpClient {
         : `Bearer ${JSON.parse(brutToken)}`,
     };
 
+    // Determine Content-Type based on body type
+    if (body instanceof FormData) {
+      // Remove Content-Type header for FormData; browser will set it automatically
+      delete headers['Content-Type'];
+    } else if (body && typeof body === 'object') {
+      headers['Content-Type'] = 'application/json';
+    }
+
     const options: RequestInit = {
       method,
       headers: headers,
     };
 
     if (body) {
-      if (body instanceof FormData) {
-        options.body = body;
-      } else {
-        options.body = JSON.stringify(body);
-      }
+      options.body = body instanceof FormData ? body : JSON.stringify(body);
     }
 
     try {

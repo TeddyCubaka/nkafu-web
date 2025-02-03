@@ -28,6 +28,7 @@ const Form: React.FC<FormProps> = ({
       console.log("Erreurs de validation:", errors);
     } else {
       const submittedData = collectFormData(formData);
+      // console.log("submittedData::::::::::::::::::::::", submittedData);
       onSubmit(submittedData);
     }
   };

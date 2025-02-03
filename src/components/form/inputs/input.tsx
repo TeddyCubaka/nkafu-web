@@ -8,6 +8,7 @@ import BooleanInput from "./booleanInput";
 import IconInput from "./iconInput";
 import HttpClient from "@/utils/http-client";
 import { iconsDictionary } from "@/components/store/icon";
+import InputFile from "./inputFile";
 
 const Input: React.FC<InputType> = ({
   id,
@@ -139,6 +140,17 @@ const Input: React.FC<InputType> = ({
             isOptional={isOptional}
             property={property}
             type="boolean"
+          />
+        ) : type === "file" ? (
+          <InputFile
+            id={id}
+            verbose={verbose}
+            type={type}
+            placeholder={placeholder}
+            value={value}
+            setValue={setValue}
+            isOptional={isOptional}
+            property={property}
           />
         ) : (
           <TextInput
