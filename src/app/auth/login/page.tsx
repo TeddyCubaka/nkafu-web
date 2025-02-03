@@ -4,7 +4,7 @@ import Input from "@/components/commons/dynamicInput";
 import { InputType } from "@/types/types";
 import Image from "next/image";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import image from "@/../public/logo/icon.png";
+import image from "../../../../public/logo/icon.png";
 import HttpClient from "@/utils/http-client";
 import { useRouter } from "next/navigation";
 import { ConnectedUser } from "@/types/connected-user";
