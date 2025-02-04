@@ -1,6 +1,7 @@
 // src/components/Input/InputFile.tsx
 import React, { useState } from "react";
 import { InputType } from "./types";
+import Image from "next/image";
 
 const InputFile: React.FC<InputType> = ({
   id,
@@ -37,13 +38,17 @@ const InputFile: React.FC<InputType> = ({
         required={!value.value && !isOptional}
       />
       {preview ? (
-        <img
+        <Image
+          width={400}
+          height={400}
           src={preview}
           alt="Preview"
           className="mt-2 max-h-64 object-cover rounded"
         />
       ) : value.value ? (
-        <img
+        <Image
+          width={400}
+          height={400}
           src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${value.value}`}
           alt="Preview"
           className="mt-2 max-h-64 object-cover rounded"

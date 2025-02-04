@@ -28,7 +28,7 @@ class HttpClient {
       endpoint[0] == "/" ? endpoint : `/${endpoint}`
     }`;
     const brutToken = localStorage.getItem("dp-sk-moto-token");
-    let headers: any = {
+    const headers: any = {
       ...this.defaultHeaders,
       ...customHeaders,
       Authorization: customToken

@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import {
@@ -8,7 +8,7 @@ import {
   FiChevronDown,
   FiChevronRight as FiChevronRightExpand,
 } from "react-icons/fi";
-import notElement from "@/../public/window.svg";
+// import notElement from "@/../public/window.svg";
 import Link from "next/link";
 import { iconsDictionary } from "../store/icon";
 import { IoEllipsisHorizontalSharp } from "react-icons/io5";
